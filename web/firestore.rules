@@ -1,0 +1,11 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Protótipo Dia 01: leitura/escrita para usuários autenticados.
+    // Sprint 02 endurece regras por perfil.
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}

@@ -1,0 +1,14 @@
+# Documentação interna (não versionar)
+doc/
+
+# Ambiente
+.env
+.env.local
+web/.env
+
+# Build e deps
+node_modules
+dist
+
+# Sistema
+.DS_Store
