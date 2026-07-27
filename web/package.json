@@ -8,6 +8,7 @@
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview",
+    "seed:dashboard": "tsx --env-file=.env scripts/seed-dashboard.ts",
     "deploy": "npm run build && npx -y firebase-tools@latest deploy --only hosting --project rogerio-48623"
   },
   "dependencies": {

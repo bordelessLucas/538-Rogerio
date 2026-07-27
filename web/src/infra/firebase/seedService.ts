@@ -99,7 +99,10 @@ export async function applyNetworkSeed(): Promise<{ message: string }> {
     })
   })
 
-  batch.set(doc(db, COLLECTIONS.metrics, 'noc'), seedMetrics)
+  batch.set(doc(db, COLLECTIONS.metrics, 'noc'), {
+    ...seedMetrics,
+    updatedAt: new Date().toISOString(),
+  })
   await batch.commit()
 
   return {

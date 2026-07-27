@@ -19,3 +19,20 @@ export function cn(...classes: Array<string | false | null | undefined>) {
 }
 
 export const APP_VERSION = 'v0.1.0-proto'
+
+/** Timestamp relativo para o listener do dashboard (“Atualizado há Xs”). */
+export function formatUpdatedAgo(isoDate: string, nowMs = Date.now()): string {
+  const diffSeconds = Math.max(0, Math.floor((nowMs - new Date(isoDate).getTime()) / 1000))
+
+  if (diffSeconds < 60) {
+    return `Atualizado há ${diffSeconds}s`
+  }
+
+  const diffMinutes = Math.floor(diffSeconds / 60)
+  if (diffMinutes < 60) {
+    return `Atualizado há ${diffMinutes}min`
+  }
+
+  const diffHours = Math.floor(diffMinutes / 60)
+  return `Atualizado há ${diffHours}h`
+}

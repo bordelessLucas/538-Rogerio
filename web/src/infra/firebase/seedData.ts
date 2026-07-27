@@ -62,6 +62,16 @@ export const seedOlts: Array<Omit<Olt, 'id' | 'popId'> & { popIndex: number }> =
     lng: BASE.lng - 0.018,
     createdAt: new Date().toISOString(),
   },
+  {
+    popIndex: 1,
+    name: 'OLT-DT-04',
+    vendor: 'Datacom',
+    ip: '10.10.2.3',
+    status: 'online',
+    lat: BASE.lat + 0.032,
+    lng: BASE.lng - 0.024,
+    createdAt: new Date().toISOString(),
+  },
 ]
 
 export const seedPons: Array<Omit<Pon, 'id' | 'oltId'> & { oltIndex: number }> = [
@@ -71,6 +81,8 @@ export const seedPons: Array<Omit<Pon, 'id' | 'oltId'> & { oltIndex: number }> =
   { oltIndex: 1, name: 'PON-0/1/2', port: 2, status: 'alert', createdAt: new Date().toISOString() },
   { oltIndex: 2, name: 'PON-0/1/1', port: 1, status: 'online', createdAt: new Date().toISOString() },
   { oltIndex: 2, name: 'PON-0/1/2', port: 2, status: 'offline', createdAt: new Date().toISOString() },
+  { oltIndex: 3, name: 'PON-0/1/1', port: 1, status: 'online', createdAt: new Date().toISOString() },
+  { oltIndex: 3, name: 'PON-0/1/2', port: 2, status: 'online', createdAt: new Date().toISOString() },
 ]
 
 export const seedCtos: Array<
@@ -138,6 +150,22 @@ export const seedCtos: Array<
     lat: BASE.lat + 0.042,
     lng: BASE.lng - 0.01,
     occupancyPercent: 88,
+    createdAt: new Date().toISOString(),
+  },
+  {
+    oltIndex: 3,
+    ponIndex: 6,
+    name: 'CTO-NORTE-02',
+    code: 'CTO-005',
+    capacity: 8,
+    occupiedPorts: 5,
+    freePorts: 3,
+    splitter: '1:8',
+    distanceMeters: 760,
+    status: 'online',
+    lat: BASE.lat + 0.034,
+    lng: BASE.lng - 0.022,
+    occupancyPercent: 63,
     createdAt: new Date().toISOString(),
   },
 ]
@@ -261,6 +289,28 @@ export const seedEvents: Omit<NetworkEvent, 'id'>[] = [
     createdAt: new Date(Date.now() - 600_000).toISOString(),
     acknowledged: false,
   },
+  {
+    type: 'onu_reboot',
+    severity: 'info',
+    title: 'ONU reiniciada',
+    description: 'Carlos Mendes — reboot remoto concluído',
+    assetType: 'client',
+    assetId: 'pending',
+    assetName: 'Carlos Mendes',
+    createdAt: new Date(Date.now() - 300_000).toISOString(),
+    acknowledged: true,
+  },
+  {
+    type: 'client_online',
+    severity: 'info',
+    title: 'Cliente Online',
+    description: 'Ana Costa restabeleceu sessão PPPoE',
+    assetType: 'client',
+    assetId: 'pending',
+    assetName: 'Ana Costa',
+    createdAt: new Date(Date.now() - 120_000).toISOString(),
+    acknowledged: true,
+  },
 ]
 
 export const seedTickets: Omit<Ticket, 'id'>[] = [
@@ -282,8 +332,13 @@ export const seedMetrics: NocMetrics = {
   clientsOnline: 1240,
   clientsOffline: 37,
   clientsBadSignal: 12,
-  oltsCount: 3,
+  oltsCount: 4,
   ticketsOpen: 18,
   networkAvailabilityPercent: 99.4,
+  fiberBreaks: 1,
+  ctosOvercapacity: 2,
+  pppoeActive: 1198,
+  activeAlarms: 9,
+  slaPercentToday: 99.1,
   updatedAt: new Date().toISOString(),
 }

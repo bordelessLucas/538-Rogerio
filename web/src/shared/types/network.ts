@@ -124,6 +124,12 @@ export interface NocMetrics {
   oltsCount: number
   ticketsOpen: number
   networkAvailabilityPercent: number
+  /** Extras de alto impacto (visão do cliente) */
+  fiberBreaks: number
+  ctosOvercapacity: number
+  pppoeActive: number
+  activeAlarms: number
+  slaPercentToday: number
   updatedAt: string
 }
 

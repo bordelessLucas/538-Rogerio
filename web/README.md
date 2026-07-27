@@ -1,6 +1,6 @@
 # R20 NOC — Web (Protótipo)
 
-Plataforma operacional FTTH — Sprint 01 / Dia 01.
+Plataforma operacional FTTH — Sprint 01 / Dia 02.
 
 ## Stack
 
@@ -30,7 +30,13 @@ App em `http://localhost:5173`.
    - Clique em **Criar usuário demo (primeira vez)**  
      Credenciais: `admin@r20noc.com` / `R20noc@2026`
    - Ou use **Entrar** se o usuário já existir
-3. No Dashboard (perfil admin): **Aplicar seed Firebase** para popular POPs, OLTs, PONs, CTOs, clientes, events, tickets e `metrics/noc`
+3. No Dashboard (perfil admin):
+   - **Aplicar seed Firebase** — POPs, OLTs, PONs, CTOs, clientes, events, tickets e `metrics/noc`
+   - **Reset métricas** — só `metrics/noc` (ou via CLI abaixo)
+
+```bash
+npm run seed:dashboard
+```
 
 ## Estrutura
 
@@ -49,12 +55,20 @@ src/
 | `npm run dev` | Dev server |
 | `npm run build` | Build produção |
 | `npm run preview` | Preview do build |
+| `npm run seed:dashboard` | Reseta `metrics/noc` com valores da demo |
 
-## Entrega Dia 01
+## Entrega
 
+### Dia 01
 - [x] App React + TS + Vite
 - [x] Firebase via `.env`
 - [x] Auth e-mail/senha + rotas protegidas
 - [x] Layout admin responsivo + menu
 - [x] Shell Dashboard NOC
 - [x] Types + seed das collections de rede
+
+### Dia 02
+- [x] KPIs ao vivo via `onSnapshot` (`metrics/noc`)
+- [x] Cards principais + extras de operação
+- [x] Lista de últimos eventos
+- [x] `IMetricsRepository` + `npm run seed:dashboard`

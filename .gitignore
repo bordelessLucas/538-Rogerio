@@ -9,6 +9,7 @@ web/.env
 # Build e deps
 node_modules
 dist
+web/.firebase/
 
 # Sistema
 .DS_Store
