@@ -51,3 +51,23 @@ button,
 input {
   font: inherit;
 }
+
+/* Leaflet — marcadores custom + popup alinhado ao tema NOC */
+.r20-map-marker {
+  background: transparent;
+  border: none;
+}
+
+.leaflet-container {
+  background: #0b1220;
+  font: inherit;
+}
+
+.r20-map-popup .leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  padding: 2px;
+}
+
+.r20-map-popup .leaflet-popup-content {
+  margin: 10px 12px;
+}

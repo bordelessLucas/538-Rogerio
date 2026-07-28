@@ -33,10 +33,11 @@ export function AppLayout() {
   const { profile, signOut } = useAuth()
   const location = useLocation()
   const [isSidebarOpen, setIsSidebarOpen] = useState(false)
+  const isMapRoute = location.pathname.startsWith('/mapa')
 
   return (
     <div className="min-h-screen bg-[var(--bg-base)] text-[var(--text-primary)]">
-      <div className="flex min-h-screen">
+      <div className={cn('flex', isMapRoute ? 'h-screen overflow-hidden' : 'min-h-screen')}>
         {isSidebarOpen ? (
           <button
             type="button"
@@ -107,8 +108,8 @@ export function AppLayout() {
           </div>
         </aside>
 
-        <div className="flex min-w-0 flex-1 flex-col">
-          <header className="sticky top-0 z-20 flex items-center justify-between gap-4 border-b border-[var(--border)] bg-[var(--bg-base)]/90 px-4 py-3 backdrop-blur md:px-6">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+          <header className="sticky top-0 z-20 flex shrink-0 items-center justify-between gap-4 border-b border-[var(--border)] bg-[var(--bg-base)]/90 px-4 py-3 backdrop-blur md:px-6">
             <div className="flex items-center gap-3">
               <button
                 type="button"
@@ -142,13 +143,20 @@ export function AppLayout() {
             </div>
           </header>
 
-          <main className="flex-1 px-4 py-6 md:px-6">
+          <main
+            className={cn(
+              'min-h-0 flex-1',
+              isMapRoute ? 'relative overflow-hidden p-0' : 'px-4 py-6 md:px-6',
+            )}
+          >
             <Outlet />
           </main>
 
-          <footer className="border-t border-[var(--border)] px-4 py-3 text-center text-xs text-[var(--text-muted)] md:px-6">
-            R20 NOC · {APP_VERSION} · Visão operacional da rede FTTH
-          </footer>
+          {isMapRoute ? null : (
+            <footer className="border-t border-[var(--border)] px-4 py-3 text-center text-xs text-[var(--text-muted)] md:px-6">
+              R20 NOC · {APP_VERSION} · Visão operacional da rede FTTH
+            </footer>
+          )}
         </div>
       </div>
     </div>

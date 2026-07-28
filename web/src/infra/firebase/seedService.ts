@@ -20,15 +20,53 @@ import {
 } from '@/infra/firebase/seedData'
 import { COLLECTIONS } from '@/shared/types/network'
 
+const NETWORK_COLLECTIONS = [
+  COLLECTIONS.pops,
+  COLLECTIONS.olts,
+  COLLECTIONS.pons,
+  COLLECTIONS.ctos,
+  COLLECTIONS.clients,
+  COLLECTIONS.events,
+  COLLECTIONS.tickets,
+] as const
+
 export async function isSeedApplied(): Promise<boolean> {
   const snap = await getDocs(query(collection(db, COLLECTIONS.olts), limit(1)))
   return !snap.empty
 }
 
-export async function applyNetworkSeed(): Promise<{ message: string }> {
+async function clearCollection(name: string) {
+  const snap = await getDocs(collection(db, name))
+  const chunks: Array<typeof snap.docs> = []
+  for (let i = 0; i < snap.docs.length; i += 400) {
+    chunks.push(snap.docs.slice(i, i + 400))
+  }
+  for (const chunk of chunks) {
+    const batch = writeBatch(db)
+    chunk.forEach((entry) => batch.delete(entry.ref))
+    await batch.commit()
+  }
+}
+
+async function clearNetworkSeed() {
+  for (const name of NETWORK_COLLECTIONS) {
+    await clearCollection(name)
+  }
+}
+
+export async function applyNetworkSeed(options?: {
+  force?: boolean
+}): Promise<{ message: string }> {
   const already = await isSeedApplied()
-  if (already) {
-    return { message: 'Seed já aplicado (OLTs encontradas).' }
+  if (already && !options?.force) {
+    return {
+      message:
+        'Seed já aplicado. Use “Aplicar seed Firebase” como admin com force no dashboard para regenerar.',
+    }
+  }
+
+  if (already && options?.force) {
+    await clearNetworkSeed()
   }
 
   const popIds: string[] = []

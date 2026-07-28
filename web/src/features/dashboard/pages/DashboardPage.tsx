@@ -55,7 +55,7 @@ export function DashboardPage() {
     setIsSeeding(true)
     setSeedMessage(null)
     try {
-      const networkResult = await applyNetworkSeed()
+      const networkResult = await applyNetworkSeed({ force: true })
       await resetDashboardMetrics()
       setSeedMessage(`${networkResult.message} Métricas NOC atualizadas.`)
     } catch (err) {
@@ -103,7 +103,7 @@ export function DashboardPage() {
                 className="inline-flex items-center gap-2 rounded-lg border border-[var(--border)] px-3 py-2 text-sm transition hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:opacity-60"
               >
                 <Database size={16} />
-                {isSeeding ? 'Aplicando...' : 'Aplicar seed Firebase'}
+                {isSeeding ? 'Aplicando...' : 'Reaplicar seed Firebase'}
               </button>
               <button
                 type="button"

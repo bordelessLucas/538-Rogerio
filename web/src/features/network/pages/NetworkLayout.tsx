@@ -15,7 +15,7 @@ export function NetworkLayout() {
       <div>
         <h1 className="text-2xl font-semibold">Cadastro de Rede</h1>
         <p className="mt-1 text-sm text-[var(--text-muted)]">
-          Estrutura OLT → PON → CTO → Cliente pronta. CRUD completo no Dia 04.
+          Hierarquia OLT → PON → CTO → Cliente com associações e CRUD.
         </p>
       </div>
 

@@ -4,13 +4,17 @@ import type {
   NetworkEvent,
   NocMetrics,
   Olt,
+  OltVendor,
   Pon,
   Pop,
   Ticket,
+  AssetStatus,
 } from '@/shared/types/network'
 
 /** Centro aproximado — ajustar com área real da R20 depois */
-const BASE = { lat: -23.5505, lng: -46.6333 }
+export const BASE = { lat: -23.5505, lng: -46.6333 }
+
+const now = () => new Date().toISOString()
 
 export const seedPops: Omit<Pop, 'id'>[] = [
   {
@@ -19,7 +23,7 @@ export const seedPops: Omit<Pop, 'id'>[] = [
     lat: BASE.lat,
     lng: BASE.lng,
     status: 'online',
-    createdAt: new Date().toISOString(),
+    createdAt: now(),
   },
   {
     name: 'POP Norte',
@@ -27,11 +31,19 @@ export const seedPops: Omit<Pop, 'id'>[] = [
     lat: BASE.lat + 0.035,
     lng: BASE.lng - 0.02,
     status: 'online',
-    createdAt: new Date().toISOString(),
+    createdAt: now(),
   },
 ]
 
-export const seedOlts: Array<Omit<Olt, 'id' | 'popId'> & { popIndex: number }> = [
+const oltDefs: Array<{
+  popIndex: number
+  name: string
+  vendor: OltVendor
+  ip: string
+  status: AssetStatus
+  lat: number
+  lng: number
+}> = [
   {
     popIndex: 0,
     name: 'OLT-ZTE-01',
@@ -40,7 +52,6 @@ export const seedOlts: Array<Omit<Olt, 'id' | 'popId'> & { popIndex: number }> =
     status: 'online',
     lat: BASE.lat + 0.002,
     lng: BASE.lng + 0.001,
-    createdAt: new Date().toISOString(),
   },
   {
     popIndex: 0,
@@ -50,7 +61,6 @@ export const seedOlts: Array<Omit<Olt, 'id' | 'popId'> & { popIndex: number }> =
     status: 'online',
     lat: BASE.lat - 0.004,
     lng: BASE.lng + 0.006,
-    createdAt: new Date().toISOString(),
   },
   {
     popIndex: 1,
@@ -60,7 +70,6 @@ export const seedOlts: Array<Omit<Olt, 'id' | 'popId'> & { popIndex: number }> =
     status: 'alert',
     lat: BASE.lat + 0.038,
     lng: BASE.lng - 0.018,
-    createdAt: new Date().toISOString(),
   },
   {
     popIndex: 1,
@@ -70,200 +79,156 @@ export const seedOlts: Array<Omit<Olt, 'id' | 'popId'> & { popIndex: number }> =
     status: 'online',
     lat: BASE.lat + 0.032,
     lng: BASE.lng - 0.024,
-    createdAt: new Date().toISOString(),
   },
 ]
 
+export const seedOlts: Array<Omit<Olt, 'id' | 'popId'> & { popIndex: number }> =
+  oltDefs.map((olt) => ({ ...olt, createdAt: now() }))
+
+/** 10 PONs — 2–3 por OLT */
 export const seedPons: Array<Omit<Pon, 'id' | 'oltId'> & { oltIndex: number }> = [
-  { oltIndex: 0, name: 'PON-0/1/1', port: 1, status: 'online', createdAt: new Date().toISOString() },
-  { oltIndex: 0, name: 'PON-0/1/2', port: 2, status: 'online', createdAt: new Date().toISOString() },
-  { oltIndex: 1, name: 'PON-0/1/1', port: 1, status: 'online', createdAt: new Date().toISOString() },
-  { oltIndex: 1, name: 'PON-0/1/2', port: 2, status: 'alert', createdAt: new Date().toISOString() },
-  { oltIndex: 2, name: 'PON-0/1/1', port: 1, status: 'online', createdAt: new Date().toISOString() },
-  { oltIndex: 2, name: 'PON-0/1/2', port: 2, status: 'offline', createdAt: new Date().toISOString() },
-  { oltIndex: 3, name: 'PON-0/1/1', port: 1, status: 'online', createdAt: new Date().toISOString() },
-  { oltIndex: 3, name: 'PON-0/1/2', port: 2, status: 'online', createdAt: new Date().toISOString() },
+  { oltIndex: 0, name: 'PON-0/1/1', port: 1, status: 'online', createdAt: now() },
+  { oltIndex: 0, name: 'PON-0/1/2', port: 2, status: 'online', createdAt: now() },
+  { oltIndex: 0, name: 'PON-0/1/3', port: 3, status: 'online', createdAt: now() },
+  { oltIndex: 1, name: 'PON-0/1/1', port: 1, status: 'online', createdAt: now() },
+  { oltIndex: 1, name: 'PON-0/1/2', port: 2, status: 'alert', createdAt: now() },
+  { oltIndex: 2, name: 'PON-0/1/1', port: 1, status: 'online', createdAt: now() },
+  { oltIndex: 2, name: 'PON-0/1/2', port: 2, status: 'offline', createdAt: now() },
+  { oltIndex: 2, name: 'PON-0/1/3', port: 3, status: 'online', createdAt: now() },
+  { oltIndex: 3, name: 'PON-0/1/1', port: 1, status: 'online', createdAt: now() },
+  { oltIndex: 3, name: 'PON-0/1/2', port: 2, status: 'online', createdAt: now() },
 ]
 
-export const seedCtos: Array<
+const FIRST_NAMES = [
+  'João',
+  'Maria',
+  'Pedro',
+  'Ana',
+  'Carlos',
+  'Juliana',
+  'Lucas',
+  'Fernanda',
+  'Rafael',
+  'Camila',
+  'Bruno',
+  'Patricia',
+  'Diego',
+  'Larissa',
+  'Felipe',
+  'Beatriz',
+  'Gustavo',
+  'Amanda',
+  'Thiago',
+  'Renata',
+]
+const LAST_NAMES = [
+  'Silva',
+  'Souza',
+  'Oliveira',
+  'Costa',
+  'Mendes',
+  'Santos',
+  'Almeida',
+  'Ferreira',
+  'Lima',
+  'Rocha',
+]
+const PLANS = ['200 Mega', '300 Mega', '500 Mega', '700 Mega', '1 Giga']
+const ONUS = ['ZTE F670L', 'Huawei EG8145', 'Fiberhome AN5506', 'Nokia G-240W']
+const STATUSES: AssetStatus[] = ['online', 'online', 'online', 'alert', 'offline']
+
+function buildCtos(): Array<
   Omit<Cto, 'id' | 'oltId' | 'ponId'> & { oltIndex: number; ponIndex: number }
-> = [
-  {
-    oltIndex: 0,
-    ponIndex: 0,
-    name: 'CTO-CENTRO-01',
-    code: 'CTO-001',
-    capacity: 16,
-    occupiedPorts: 11,
-    freePorts: 5,
-    splitter: '1:16',
-    distanceMeters: 420,
-    status: 'online',
-    lat: BASE.lat + 0.008,
-    lng: BASE.lng + 0.004,
-    occupancyPercent: 69,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    oltIndex: 0,
-    ponIndex: 1,
-    name: 'CTO-CENTRO-02',
-    code: 'CTO-002',
-    capacity: 8,
-    occupiedPorts: 7,
-    freePorts: 1,
-    splitter: '1:8',
-    distanceMeters: 610,
-    status: 'alert',
-    lat: BASE.lat + 0.012,
-    lng: BASE.lng - 0.003,
-    occupancyPercent: 88,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    oltIndex: 1,
-    ponIndex: 2,
-    name: 'CTO-SUL-01',
-    code: 'CTO-003',
-    capacity: 16,
-    occupiedPorts: 6,
-    freePorts: 10,
-    splitter: '1:16',
-    distanceMeters: 890,
-    status: 'online',
-    lat: BASE.lat - 0.01,
-    lng: BASE.lng + 0.012,
-    occupancyPercent: 38,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    oltIndex: 2,
-    ponIndex: 4,
-    name: 'CTO-NORTE-01',
-    code: 'CTO-004',
-    capacity: 16,
-    occupiedPorts: 14,
-    freePorts: 2,
-    splitter: '1:16',
-    distanceMeters: 1100,
-    status: 'alert',
-    lat: BASE.lat + 0.042,
-    lng: BASE.lng - 0.01,
-    occupancyPercent: 88,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    oltIndex: 3,
-    ponIndex: 6,
-    name: 'CTO-NORTE-02',
-    code: 'CTO-005',
-    capacity: 8,
-    occupiedPorts: 5,
-    freePorts: 3,
-    splitter: '1:8',
-    distanceMeters: 760,
-    status: 'online',
-    lat: BASE.lat + 0.034,
-    lng: BASE.lng - 0.022,
-    occupancyPercent: 63,
-    createdAt: new Date().toISOString(),
-  },
-]
+> {
+  const zones = ['CENTRO', 'SUL', 'NORTE', 'LESTE', 'OESTE']
+  const items: Array<
+    Omit<Cto, 'id' | 'oltId' | 'ponId'> & { oltIndex: number; ponIndex: number }
+  > = []
 
-export const seedClients: Array<
+  for (let i = 0; i < 20; i += 1) {
+    const ponIndex = i % seedPons.length
+    const oltIndex = seedPons[ponIndex].oltIndex
+    const capacity = i % 3 === 0 ? 8 : 16
+    const occupiedPorts = Math.min(
+      capacity,
+      Math.floor(capacity * (0.35 + (i % 7) * 0.1)),
+    )
+    const freePorts = capacity - occupiedPorts
+    const occupancyPercent = Math.round((occupiedPorts / capacity) * 1000) / 10
+    const status: AssetStatus =
+      occupancyPercent > 80 ? 'alert' : i % 11 === 0 ? 'offline' : 'online'
+    const angle = (i / 20) * Math.PI * 2
+    const radius = 0.008 + (i % 5) * 0.004
+
+    items.push({
+      oltIndex,
+      ponIndex,
+      name: `CTO-${zones[i % zones.length]}-${String(i + 1).padStart(2, '0')}`,
+      code: `CTO-${String(i + 1).padStart(3, '0')}`,
+      capacity,
+      occupiedPorts,
+      freePorts,
+      splitter: capacity === 8 ? '1:8' : '1:16',
+      distanceMeters: 300 + i * 45,
+      status,
+      lat: BASE.lat + Math.cos(angle) * radius + (oltIndex >= 2 ? 0.03 : 0),
+      lng: BASE.lng + Math.sin(angle) * radius + (oltIndex >= 2 ? -0.015 : 0),
+      occupancyPercent,
+      createdAt: now(),
+    })
+  }
+
+  return items
+}
+
+export const seedCtos = buildCtos()
+
+function buildClients(): Array<
   Omit<Client, 'id' | 'ctoId' | 'oltId' | 'ponId'> & { ctoIndex: number }
-> = [
-  {
-    ctoIndex: 0,
-    name: 'João Silva',
-    plan: '500 Mega',
-    onuModel: 'ZTE F670L',
-    powerDbm: -22.4,
-    lastAccessAt: new Date().toISOString(),
-    ip: '100.64.10.21',
-    equipment: 'ONU Bridge',
-    mac: 'AA:BB:CC:11:22:01',
-    serial: 'ZTEG12345001',
-    status: 'online',
-    lat: BASE.lat + 0.0082,
-    lng: BASE.lng + 0.0042,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    ctoIndex: 0,
-    name: 'Maria Souza',
-    plan: '300 Mega',
-    onuModel: 'Huawei EG8145',
-    powerDbm: -27.1,
-    lastAccessAt: new Date(Date.now() - 3600_000).toISOString(),
-    ip: '100.64.10.22',
-    equipment: 'ONU Router',
-    mac: 'AA:BB:CC:11:22:02',
-    serial: 'HWTC12345002',
-    status: 'alert',
-    lat: BASE.lat + 0.0085,
-    lng: BASE.lng + 0.0035,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    ctoIndex: 1,
-    name: 'Pedro Oliveira',
-    plan: '700 Mega',
-    onuModel: 'ZTE F670L',
-    powerDbm: -18.0,
-    lastAccessAt: new Date(Date.now() - 86_400_000).toISOString(),
-    ip: '100.64.10.31',
-    equipment: 'ONU Bridge',
-    mac: 'AA:BB:CC:11:22:03',
-    serial: 'ZTEG12345003',
-    status: 'offline',
-    lat: BASE.lat + 0.0123,
-    lng: BASE.lng - 0.0028,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    ctoIndex: 2,
-    name: 'Ana Costa',
-    plan: '200 Mega',
-    onuModel: 'Fiberhome AN5506',
-    powerDbm: -23.8,
-    lastAccessAt: new Date().toISOString(),
-    ip: '100.64.20.11',
-    equipment: 'ONU Router',
-    mac: 'AA:BB:CC:11:22:04',
-    serial: 'FHTT12345004',
-    status: 'online',
-    lat: BASE.lat - 0.0102,
-    lng: BASE.lng + 0.0124,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    ctoIndex: 3,
-    name: 'Carlos Mendes',
-    plan: '500 Mega',
-    onuModel: 'ZTE F670L',
-    powerDbm: -29.2,
-    lastAccessAt: new Date(Date.now() - 7200_000).toISOString(),
-    ip: '100.64.30.15',
-    equipment: 'ONU Bridge',
-    mac: 'AA:BB:CC:11:22:05',
-    serial: 'ZTEG12345005',
-    status: 'alert',
-    lat: BASE.lat + 0.0425,
-    lng: BASE.lng - 0.0095,
-    createdAt: new Date().toISOString(),
-  },
-]
+> {
+  const items: Array<
+    Omit<Client, 'id' | 'ctoId' | 'oltId' | 'ponId'> & { ctoIndex: number }
+  > = []
+
+  for (let i = 0; i < 50; i += 1) {
+    const ctoIndex = i % seedCtos.length
+    const cto = seedCtos[ctoIndex]
+    const status = STATUSES[i % STATUSES.length]
+    const powerDbm =
+      status === 'offline' ? -32 : status === 'alert' ? -27.5 - (i % 3) * 0.4 : -18 - (i % 8) * 0.7
+
+    items.push({
+      ctoIndex,
+      name: `${FIRST_NAMES[i % FIRST_NAMES.length]} ${LAST_NAMES[i % LAST_NAMES.length]}`,
+      plan: PLANS[i % PLANS.length],
+      onuModel: ONUS[i % ONUS.length],
+      powerDbm: Math.round(powerDbm * 10) / 10,
+      lastAccessAt: new Date(Date.now() - (status === 'offline' ? 86_400_000 : i * 120_000)).toISOString(),
+      ip: `100.64.${10 + Math.floor(i / 25)}.${20 + (i % 200)}`,
+      equipment: i % 2 === 0 ? 'ONU Bridge' : 'ONU Router',
+      mac: `AA:BB:CC:${String(10 + (i % 80)).padStart(2, '0')}:${String(20 + (i % 50)).padStart(2, '0')}:${String(i % 99).padStart(2, '0')}`,
+      serial: `ZTEG${String(12345000 + i)}`,
+      status,
+      lat: cto.lat + ((i % 5) - 2) * 0.00035,
+      lng: cto.lng + ((i % 7) - 3) * 0.00035,
+      createdAt: now(),
+    })
+  }
+
+  return items
+}
+
+export const seedClients = buildClients()
 
 export const seedEvents: Omit<NetworkEvent, 'id'>[] = [
   {
     type: 'client_offline',
     severity: 'critical',
     title: 'Cliente Offline',
-    description: 'Pedro Oliveira sem sessão há mais de 1h',
+    description: `${seedClients[2].name} sem sessão há mais de 1h`,
     assetType: 'client',
     assetId: 'pending',
-    assetName: 'Pedro Oliveira',
+    assetName: seedClients[2].name,
     createdAt: new Date(Date.now() - 1_800_000).toISOString(),
     acknowledged: false,
   },
@@ -274,7 +239,7 @@ export const seedEvents: Omit<NetworkEvent, 'id'>[] = [
     description: 'Sinal abaixo de -26 dBm',
     assetType: 'client',
     assetId: 'pending',
-    assetName: 'Maria Souza',
+    assetName: seedClients[3].name,
     createdAt: new Date(Date.now() - 900_000).toISOString(),
     acknowledged: false,
   },
@@ -282,10 +247,10 @@ export const seedEvents: Omit<NetworkEvent, 'id'>[] = [
     type: 'signal_oscillation',
     severity: 'warning',
     title: 'Oscilação de sinal',
-    description: 'Variação detectada na CTO-NORTE-01',
+    description: `Variação detectada na ${seedCtos[4].name}`,
     assetType: 'cto',
     assetId: 'pending',
-    assetName: 'CTO-NORTE-01',
+    assetName: seedCtos[4].name,
     createdAt: new Date(Date.now() - 600_000).toISOString(),
     acknowledged: false,
   },
@@ -293,10 +258,10 @@ export const seedEvents: Omit<NetworkEvent, 'id'>[] = [
     type: 'onu_reboot',
     severity: 'info',
     title: 'ONU reiniciada',
-    description: 'Carlos Mendes — reboot remoto concluído',
+    description: `${seedClients[8].name} — reboot remoto concluído`,
     assetType: 'client',
     assetId: 'pending',
-    assetName: 'Carlos Mendes',
+    assetName: seedClients[8].name,
     createdAt: new Date(Date.now() - 300_000).toISOString(),
     acknowledged: true,
   },
@@ -304,10 +269,10 @@ export const seedEvents: Omit<NetworkEvent, 'id'>[] = [
     type: 'client_online',
     severity: 'info',
     title: 'Cliente Online',
-    description: 'Ana Costa restabeleceu sessão PPPoE',
+    description: `${seedClients[0].name} restabeleceu sessão PPPoE`,
     assetType: 'client',
     assetId: 'pending',
-    assetName: 'Ana Costa',
+    assetName: seedClients[0].name,
     createdAt: new Date(Date.now() - 120_000).toISOString(),
     acknowledged: true,
   },
@@ -315,16 +280,16 @@ export const seedEvents: Omit<NetworkEvent, 'id'>[] = [
 
 export const seedTickets: Omit<Ticket, 'id'>[] = [
   {
-    title: 'Cliente sem conexão — Pedro Oliveira',
+    title: `Cliente sem conexão — ${seedClients[2].name}`,
     status: 'open',
     priority: 'high',
-    createdAt: new Date().toISOString(),
+    createdAt: now(),
   },
   {
-    title: 'Sinal ruim — Maria Souza',
+    title: `Sinal ruim — ${seedClients[3].name}`,
     status: 'in_progress',
     priority: 'medium',
-    createdAt: new Date().toISOString(),
+    createdAt: now(),
   },
 ]
 
@@ -336,9 +301,9 @@ export const seedMetrics: NocMetrics = {
   ticketsOpen: 18,
   networkAvailabilityPercent: 99.4,
   fiberBreaks: 1,
-  ctosOvercapacity: 2,
+  ctosOvercapacity: seedCtos.filter((cto) => cto.occupancyPercent > 80).length,
   pppoeActive: 1198,
   activeAlarms: 9,
   slaPercentToday: 99.1,
-  updatedAt: new Date().toISOString(),
+  updatedAt: now(),
 }
