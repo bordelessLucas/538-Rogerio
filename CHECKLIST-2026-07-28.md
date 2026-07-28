@@ -83,8 +83,8 @@ Sessão: validação do Dia 02 + implementação do Dia 03 (Mapa Inteligente) e 
 ## Entrega desta sessão
 
 - [x] Checklist do dia
-- [ ] Push no GitHub
-- [ ] Deploy Firebase Hosting
+- [x] Push no GitHub (`main`)
+- [x] Deploy Firebase Hosting
 
 ## Fora do escopo hoje
 
