@@ -6,8 +6,8 @@ import { cn } from '@/shared/utils'
 
 export function OccupancyBadge({ percent }: { percent: number }) {
   const tone =
-    percent > 80 ? 'offline' : percent >= 60 ? 'alert' : 'online'
-  const emoji = percent > 80 ? '🔴' : percent >= 60 ? '🟡' : '🟢'
+    percent > 80 ? 'offline' : percent > 60 ? 'alert' : 'online'
+  const emoji = percent > 80 ? '🔴' : percent > 60 ? '🟡' : '🟢'
 
   return (
     <span
@@ -65,11 +65,12 @@ export function ListToolbar({
 interface EntityActionsProps {
   onEdit: () => void
   onDelete: () => void
-  mapQuery?: string
+  /** Deep link `/mapa?type=&id=` — foca o marcador ao abrir */
+  mapTo?: string
   detailsTo?: string
 }
 
-export function EntityActions({ onEdit, onDelete, mapQuery, detailsTo }: EntityActionsProps) {
+export function EntityActions({ onEdit, onDelete, mapTo, detailsTo }: EntityActionsProps) {
   return (
     <div className="flex flex-wrap gap-1.5">
       <button
@@ -79,11 +80,10 @@ export function EntityActions({ onEdit, onDelete, mapQuery, detailsTo }: EntityA
       >
         <Pencil size={12} /> Editar
       </button>
-      {mapQuery ? (
+      {mapTo ? (
         <Link
-          to={`/mapa`}
+          to={mapTo}
           className="inline-flex items-center gap-1 rounded-lg border border-[var(--border)] px-2 py-1 text-xs hover:border-[var(--accent)]"
-          title={mapQuery}
         >
           <MapPin size={12} /> Mapa
         </Link>

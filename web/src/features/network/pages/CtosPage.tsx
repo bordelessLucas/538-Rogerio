@@ -16,6 +16,7 @@ import {
   updateCto,
 } from '@/features/network/services/networkService'
 import { matchesQuery, paginate } from '@/features/network/utils/list'
+import { buildMapDeepLink } from '@/features/map/utils/mapDeepLink'
 import { CardShell, StatusBadge } from '@/shared/ui'
 import { useToast } from '@/shared/ui/Toast'
 import { STATUS_LABEL } from '@/shared/utils'
@@ -202,8 +203,8 @@ export function CtosPage() {
                           setDrawerOpen(true)
                         }}
                         onDelete={() => void handleDelete(cto)}
-                        mapQuery={cto.name}
-                        detailsTo="/rede/ctos"
+                        mapTo={buildMapDeepLink('cto', cto.id)}
+                        detailsTo={`/rede/ctos/${cto.id}`}
                       />
                     </td>
                   </tr>
@@ -232,7 +233,8 @@ export function CtosPage() {
                     setDrawerOpen(true)
                   }}
                   onDelete={() => void handleDelete(cto)}
-                  mapQuery={cto.name}
+                  mapTo={buildMapDeepLink('cto', cto.id)}
+                  detailsTo={`/rede/ctos/${cto.id}`}
                 />
               </CardShell>
             ))}

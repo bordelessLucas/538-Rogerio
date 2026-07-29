@@ -5,8 +5,11 @@ import { AuthProvider } from '@/features/auth/context/AuthContext'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
 import { DashboardPage } from '@/features/dashboard/pages/DashboardPage'
 import { MapPage } from '@/features/map/pages/MapPage'
+import { MonitoringPage } from '@/features/monitoring/pages/MonitoringPage'
 import { ClientsPage } from '@/features/network/pages/ClientsPage'
+import { ClientDetailPage } from '@/features/network/pages/ClientDetailPage'
 import { CtosPage } from '@/features/network/pages/CtosPage'
+import { CtoDetailPage } from '@/features/network/pages/CtoDetailPage'
 import { NetworkLayout } from '@/features/network/pages/NetworkLayout'
 import { NetworkOverviewPage } from '@/features/network/pages/NetworkOverviewPage'
 import { OltsPage } from '@/features/network/pages/OltsPage'
@@ -31,17 +34,11 @@ export function AppRouter() {
                   <Route path="olts" element={<OltsPage />} />
                   <Route path="pons" element={<PonsPage />} />
                   <Route path="ctos" element={<CtosPage />} />
+                  <Route path="ctos/:id" element={<CtoDetailPage />} />
                   <Route path="clientes" element={<ClientsPage />} />
+                  <Route path="clientes/:id" element={<ClientDetailPage />} />
                 </Route>
-                <Route
-                  path="monitoramento"
-                  element={
-                    <PlaceholderPage
-                      title="Monitoramento"
-                      description="Feed AO VIVO e simulador de eventos no Dia 06."
-                    />
-                  }
-                />
+                <Route path="monitoramento" element={<MonitoringPage />} />
                 <Route
                   path="chamados"
                   element={

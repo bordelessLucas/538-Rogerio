@@ -15,6 +15,7 @@ import {
   updateClient,
 } from '@/features/network/services/networkService'
 import { matchesQuery, paginate } from '@/features/network/utils/list'
+import { buildMapDeepLink } from '@/features/map/utils/mapDeepLink'
 import { CardShell, StatusBadge } from '@/shared/ui'
 import { useToast } from '@/shared/ui/Toast'
 import { STATUS_LABEL } from '@/shared/utils'
@@ -168,8 +169,8 @@ export function ClientsPage() {
                           setDrawerOpen(true)
                         }}
                         onDelete={() => void handleDelete(client)}
-                        mapQuery={client.name}
-                        detailsTo="/rede/clientes"
+                        mapTo={buildMapDeepLink('client', client.id)}
+                        detailsTo={`/rede/clientes/${client.id}`}
                       />
                     </td>
                   </tr>
@@ -196,7 +197,8 @@ export function ClientsPage() {
                     setDrawerOpen(true)
                   }}
                   onDelete={() => void handleDelete(client)}
-                  mapQuery={client.name}
+                  mapTo={buildMapDeepLink('client', client.id)}
+                  detailsTo={`/rede/clientes/${client.id}`}
                 />
               </CardShell>
             ))}

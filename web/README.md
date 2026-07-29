@@ -36,6 +36,7 @@ App em `http://localhost:5173`.
 
 ```bash
 npm run seed:dashboard
+npm run simulate:events
 ```
 
 ## Estrutura
@@ -56,6 +57,7 @@ src/
 | `npm run build` | Build produção |
 | `npm run preview` | Preview do build |
 | `npm run seed:dashboard` | Reseta `metrics/noc` com valores da demo |
+| `npm run simulate:events` | Loop local de eventos AO VIVO (Dia 06) |
 
 ## Entrega
 

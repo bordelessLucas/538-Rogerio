@@ -15,6 +15,7 @@ import {
   updateOlt,
 } from '@/features/network/services/networkService'
 import { matchesQuery, paginate } from '@/features/network/utils/list'
+import { buildMapDeepLink } from '@/features/map/utils/mapDeepLink'
 import { CardShell, StatusBadge } from '@/shared/ui'
 import { useToast } from '@/shared/ui/Toast'
 import { STATUS_LABEL } from '@/shared/utils'
@@ -153,7 +154,7 @@ export function OltsPage() {
                       <EntityActions
                         onEdit={() => openEdit(olt)}
                         onDelete={() => void handleDelete(olt)}
-                        mapQuery={olt.name}
+                        mapTo={buildMapDeepLink('olt', olt.id)}
                         detailsTo="/rede/olts"
                       />
                     </td>
@@ -179,7 +180,7 @@ export function OltsPage() {
                 <EntityActions
                   onEdit={() => openEdit(olt)}
                   onDelete={() => void handleDelete(olt)}
-                  mapQuery={olt.name}
+                  mapTo={buildMapDeepLink('olt', olt.id)}
                 />
               </CardShell>
             ))}

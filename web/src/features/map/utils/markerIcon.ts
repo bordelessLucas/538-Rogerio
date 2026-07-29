@@ -33,9 +33,9 @@ export function createAssetIcon(type: MapAssetType, status: AssetStatus): L.DivI
 export function assetDetailPath(asset: MapAsset): string {
   switch (asset.type) {
     case 'client':
-      return `/rede/clientes`
+      return `/rede/clientes/${asset.id}`
     case 'cto':
-      return `/rede/ctos`
+      return `/rede/ctos/${asset.id}`
     case 'olt':
       return `/rede/olts`
     case 'pop':

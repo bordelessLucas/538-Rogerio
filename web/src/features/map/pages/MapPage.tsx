@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { MapFilters } from '@/features/map/components/MapFilters'
 import { MapLegend } from '@/features/map/components/MapLegend'
 import { MapToolbar } from '@/features/map/components/MapToolbar'
 import { NetworkMap } from '@/features/map/components/NetworkMap'
 import type { MapAsset, MapStatusFilter, MapTypeFilter } from '@/features/map/domain/mapTypes'
 import { useMapAssets } from '@/features/map/hooks/useMapAssets'
+import { parseMapDeepLink } from '@/features/map/utils/mapDeepLink'
 
 const DEFAULT_TYPE_FILTER: MapTypeFilter = {
   client: true,
@@ -30,7 +32,22 @@ function filterAssets(
   )
 }
 
+function focusAsset(asset: MapAsset): {
+  typeFilter: Partial<MapTypeFilter>
+  statusFilter: Partial<MapStatusFilter>
+} {
+  return {
+    typeFilter: { [asset.type]: true },
+    statusFilter: { [asset.status]: true },
+  }
+}
+
 export function MapPage() {
+  const [searchParams] = useSearchParams()
+  const deepLink = parseMapDeepLink(searchParams)
+  const deepLinkKey = deepLink ? `${deepLink.type}:${deepLink.id}` : null
+  const focusedDeepLinkRef = useRef<string | null>(null)
+
   const { assets, isLoading, error } = useMapAssets()
   const [typeFilter, setTypeFilter] = useState<MapTypeFilter>(DEFAULT_TYPE_FILTER)
   const [statusFilter, setStatusFilter] = useState<MapStatusFilter>(DEFAULT_STATUS_FILTER)
@@ -38,15 +55,43 @@ export function MapPage() {
   const [locateToken, setLocateToken] = useState(0)
   const [flyTo, setFlyTo] = useState<MapAsset | null>(null)
   const [locateError, setLocateError] = useState<string | null>(null)
+  const [deepLinkError, setDeepLinkError] = useState<string | null>(null)
   const [hasInitialFit, setHasInitialFit] = useState(false)
 
   const visibleAssets = filterAssets(assets, typeFilter, statusFilter)
 
   useEffect(() => {
+    if (isLoading || !deepLinkKey || !deepLink) return
+    if (focusedDeepLinkRef.current === deepLinkKey) return
+
+    const target = assets.find(
+      (asset) => asset.type === deepLink.type && asset.id === deepLink.id,
+    )
+
+    if (!target) {
+      if (assets.length > 0) {
+        focusedDeepLinkRef.current = deepLinkKey
+        setDeepLinkError('Ativo não encontrado no mapa (sem coordenadas ou ID inválido).')
+        setHasInitialFit(true)
+      }
+      return
+    }
+
+    const patch = focusAsset(target)
+    setTypeFilter((prev) => ({ ...prev, ...patch.typeFilter }))
+    setStatusFilter((prev) => ({ ...prev, ...patch.statusFilter }))
+    setFlyTo({ ...target })
+    setDeepLinkError(null)
+    setHasInitialFit(true)
+    focusedDeepLinkRef.current = deepLinkKey
+  }, [assets, deepLink, deepLinkKey, isLoading])
+
+  useEffect(() => {
+    if (deepLinkKey) return
     if (hasInitialFit || isLoading || visibleAssets.length === 0) return
     setFitToken((token) => token + 1)
     setHasInitialFit(true)
-  }, [hasInitialFit, isLoading, visibleAssets.length])
+  }, [deepLinkKey, hasInitialFit, isLoading, visibleAssets.length])
 
   return (
     <div className="relative h-full min-h-0 w-full overflow-hidden">
@@ -69,8 +114,9 @@ export function MapPage() {
             }}
             onFitAll={() => setFitToken((token) => token + 1)}
             onFlyTo={(asset) => {
-              setTypeFilter((prev) => ({ ...prev, [asset.type]: true }))
-              setStatusFilter((prev) => ({ ...prev, [asset.status]: true }))
+              const patch = focusAsset(asset)
+              setTypeFilter((prev) => ({ ...prev, ...patch.typeFilter }))
+              setStatusFilter((prev) => ({ ...prev, ...patch.statusFilter }))
               setFlyTo({ ...asset })
             }}
           />
@@ -106,6 +152,12 @@ export function MapPage() {
       {error ? (
         <div className="absolute inset-x-0 bottom-4 z-[1100] mx-auto max-w-md rounded-xl border border-[var(--status-offline)]/40 bg-[var(--bg-panel)] px-4 py-3 text-center text-sm text-[var(--status-offline)]">
           Falha ao carregar ativos: {error.message}
+        </div>
+      ) : null}
+
+      {deepLinkError ? (
+        <div className="absolute inset-x-0 bottom-4 z-[1100] mx-auto max-w-md rounded-xl border border-[var(--status-alert)]/40 bg-[var(--bg-panel)] px-4 py-3 text-center text-sm text-[var(--status-alert)]">
+          {deepLinkError}
         </div>
       ) : null}
 

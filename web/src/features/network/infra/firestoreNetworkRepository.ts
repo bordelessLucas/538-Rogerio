@@ -18,6 +18,7 @@ import {
   COLLECTIONS,
   type Client,
   type Cto,
+  type NetworkEvent,
   type Olt,
   type Pon,
   type Pop,
@@ -44,6 +45,18 @@ async function withCtoInheritance(values: ClientFormValues) {
     ...values,
     oltId: cto.oltId,
     ponId: cto.ponId,
+  }
+}
+
+/** Garante que a PON pertence à OLT — regra de domínio, não só UI. */
+async function assertPonBelongsToOlt(oltId: string, ponId: string) {
+  const ponSnap = await getDoc(doc(db, COLLECTIONS.pons, ponId))
+  if (!ponSnap.exists()) {
+    throw new Error('PON selecionada não encontrada')
+  }
+  const pon = ponSnap.data() as Omit<Pon, 'id'>
+  if (pon.oltId !== oltId) {
+    throw new Error('A PON selecionada não pertence à OLT informada')
   }
 }
 
@@ -84,6 +97,51 @@ export const firestoreNetworkRepository: INetworkRepository = {
     return onSnapshot(
       collection(db, COLLECTIONS.clients),
       (snap) => onData(mapDocs<Client>(snap.docs)),
+      (error) => onError(error),
+    )
+  },
+
+  subscribeCto(id, onData, onError) {
+    return onSnapshot(
+      doc(db, COLLECTIONS.ctos, id),
+      (snap) => {
+        if (!snap.exists()) {
+          onData(null)
+          return
+        }
+        onData({ id: snap.id, ...(snap.data() as Omit<Cto, 'id'>) })
+      },
+      (error) => onError(error),
+    )
+  },
+
+  subscribeClient(id, onData, onError) {
+    return onSnapshot(
+      doc(db, COLLECTIONS.clients, id),
+      (snap) => {
+        if (!snap.exists()) {
+          onData(null)
+          return
+        }
+        onData({ id: snap.id, ...(snap.data() as Omit<Client, 'id'>) })
+      },
+      (error) => onError(error),
+    )
+  },
+
+  subscribeAssetEvents(assetId, onData, onError) {
+    const eventsQuery = query(
+      collection(db, COLLECTIONS.events),
+      where('assetId', '==', assetId),
+    )
+    return onSnapshot(
+      eventsQuery,
+      (snap) => {
+        const events = mapDocs<NetworkEvent>(snap.docs).sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        )
+        onData(events.slice(0, 8))
+      },
       (error) => onError(error),
     )
   },
@@ -130,6 +188,7 @@ export const firestoreNetworkRepository: INetworkRepository = {
   },
 
   async createCto(values) {
+    await assertPonBelongsToOlt(values.oltId, values.ponId)
     const ports = deriveCtoPorts(values.capacity, values.occupiedPorts)
     const ref = doc(collection(db, COLLECTIONS.ctos))
     await setDoc(ref, {
@@ -141,6 +200,7 @@ export const firestoreNetworkRepository: INetworkRepository = {
   },
 
   async updateCto(id, values) {
+    await assertPonBelongsToOlt(values.oltId, values.ponId)
     const ports = deriveCtoPorts(values.capacity, values.occupiedPorts)
     await updateDoc(doc(db, COLLECTIONS.ctos, id), { ...values, ...ports })
   },

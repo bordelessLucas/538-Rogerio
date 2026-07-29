@@ -1,4 +1,4 @@
-import type { Client, Cto, Olt, Pon, Pop } from '@/shared/types/network'
+import type { Client, Cto, NetworkEvent, Olt, Pon, Pop } from '@/shared/types/network'
 import type {
   ClientFormValues,
   CtoFormValues,
@@ -29,6 +29,24 @@ export interface INetworkRepository {
 
   subscribeClients(
     onData: (items: Client[]) => void,
+    onError: (error: Error) => void,
+  ): () => void
+
+  subscribeCto(
+    id: string,
+    onData: (item: Cto | null) => void,
+    onError: (error: Error) => void,
+  ): () => void
+
+  subscribeClient(
+    id: string,
+    onData: (item: Client | null) => void,
+    onError: (error: Error) => void,
+  ): () => void
+
+  subscribeAssetEvents(
+    assetId: string,
+    onData: (events: NetworkEvent[]) => void,
     onError: (error: Error) => void,
   ): () => void
 

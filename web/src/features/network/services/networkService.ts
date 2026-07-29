@@ -14,6 +14,9 @@ export const subscribeOlts = repository.subscribeOlts.bind(repository)
 export const subscribePons = repository.subscribePons.bind(repository)
 export const subscribeCtos = repository.subscribeCtos.bind(repository)
 export const subscribeClients = repository.subscribeClients.bind(repository)
+export const subscribeCto = repository.subscribeCto.bind(repository)
+export const subscribeClient = repository.subscribeClient.bind(repository)
+export const subscribeAssetEvents = repository.subscribeAssetEvents.bind(repository)
 
 export async function createOlt(values: OltFormValues) {
   return repository.createOlt(values)
