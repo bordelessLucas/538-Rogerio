@@ -74,5 +74,5 @@ Sessão: fechamento do Dia 04 (gaps) + Dia 05 (detalhamento) + Dia 06 (monitoram
 ## Entrega desta sessão
 
 - [x] Checklist do dia (`CHECKLIST-2026-07-29.md`)
-- [ ] Push no GitHub (`main`)
-- [ ] Deploy Firebase Hosting (`rogerio-48623`)
+- [x] Push no GitHub (`main`)
+- [x] Deploy Firebase Hosting (`rogerio-48623` → https://rogerio-48623.web.app)
