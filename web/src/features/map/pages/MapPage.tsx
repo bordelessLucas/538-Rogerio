@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import { MapCreateModal, type MapClickCoords } from '@/features/map/components/MapCreateModal'
 import { MapFilters } from '@/features/map/components/MapFilters'
 import { MapLegend } from '@/features/map/components/MapLegend'
 import { MapToolbar } from '@/features/map/components/MapToolbar'
@@ -57,6 +58,7 @@ export function MapPage() {
   const [locateError, setLocateError] = useState<string | null>(null)
   const [deepLinkError, setDeepLinkError] = useState<string | null>(null)
   const [hasInitialFit, setHasInitialFit] = useState(false)
+  const [createCoords, setCreateCoords] = useState<MapClickCoords | null>(null)
 
   const visibleAssets = filterAssets(assets, typeFilter, statusFilter)
 
@@ -101,6 +103,8 @@ export function MapPage() {
         flyTo={flyTo}
         locateToken={locateToken}
         onLocateError={setLocateError}
+        pendingCoords={createCoords}
+        onDoubleClick={(coords) => setCreateCoords(coords)}
       />
 
       <div className="pointer-events-none absolute inset-0 z-[1000] p-3 md:p-4">
@@ -120,9 +124,13 @@ export function MapPage() {
               setFlyTo({ ...asset })
             }}
           />
+          <p className="mt-2 hidden rounded-lg border border-white/10 bg-[var(--bg-panel-solid)]/90 px-2.5 py-1.5 text-[11px] text-white/55 shadow sm:inline-block">
+            Dê um <span className="font-medium text-[var(--accent)]">duplo clique</span> no mapa
+            para cadastrar OLT, CTO ou Cliente neste ponto.
+          </p>
         </div>
 
-        <div className="pointer-events-none absolute top-16 right-3 bottom-3 left-3 flex items-start justify-between gap-3 md:top-20 md:right-4 md:bottom-4 md:left-4">
+        <div className="pointer-events-none absolute top-16 right-3 bottom-3 left-3 flex items-start justify-between gap-3 md:top-24 md:right-4 md:bottom-4 md:left-4">
           <div className="pointer-events-auto max-h-full w-56 overflow-y-auto sm:w-60">
             <MapFilters
               typeFilter={typeFilter}
@@ -145,7 +153,7 @@ export function MapPage() {
 
       {isLoading ? (
         <div className="absolute inset-0 z-[1100] flex items-center justify-center bg-[var(--bg-base)]/75">
-          <div className="w-64 space-y-3 rounded-xl border border-[var(--border)] bg-[var(--bg-panel)] p-4 shadow-lg">
+          <div className="w-64 space-y-3 rounded-xl border border-white/10 bg-[var(--bg-panel-solid)] p-4 shadow-lg">
             <p className="text-sm text-[var(--text-muted)]">Carregando ativos do mapa...</p>
             <div className="h-2 animate-pulse rounded bg-white/10" />
             <div className="h-2 w-4/5 animate-pulse rounded bg-white/5" />
@@ -155,21 +163,21 @@ export function MapPage() {
       ) : null}
 
       {error ? (
-        <div className="absolute inset-x-0 bottom-4 z-[1100] mx-auto max-w-md rounded-xl border border-[var(--status-offline)]/40 bg-[var(--bg-panel)] px-4 py-3 text-center text-sm text-[var(--status-offline)]">
+        <div className="absolute inset-x-0 bottom-4 z-[1100] mx-auto max-w-md rounded-xl border border-[var(--status-offline)]/40 bg-[var(--bg-panel-solid)] px-4 py-3 text-center text-sm text-[var(--status-offline)]">
           Falha ao carregar ativos: {error.message}
         </div>
       ) : null}
 
       {deepLinkError ? (
-        <div className="absolute inset-x-0 bottom-4 z-[1100] mx-auto max-w-md rounded-xl border border-[var(--status-alert)]/40 bg-[var(--bg-panel)] px-4 py-3 text-center text-sm text-[var(--status-alert)]">
+        <div className="absolute inset-x-0 bottom-4 z-[1100] mx-auto max-w-md rounded-xl border border-[var(--status-alert)]/40 bg-[var(--bg-panel-solid)] px-4 py-3 text-center text-sm text-[var(--status-alert)]">
           {deepLinkError}
         </div>
       ) : null}
 
       {!isLoading && !error && assets.length === 0 ? (
-        <div className="absolute inset-x-0 bottom-4 z-[1100] mx-auto max-w-md rounded-xl border border-[var(--border)] bg-[var(--bg-panel)] px-4 py-4 text-center shadow-lg">
+        <div className="absolute inset-x-0 bottom-4 z-[1100] mx-auto max-w-md rounded-xl border border-white/10 bg-[var(--bg-panel-solid)] px-4 py-4 text-center shadow-lg">
           <p className="text-sm text-[var(--text-muted)]">
-            Nenhum ativo com coordenadas. Aplique o seed no Dashboard.
+            Nenhum ativo com coordenadas. Aplique o seed no Dashboard ou dê duplo clique no mapa.
           </p>
           <Link
             to="/"
@@ -178,6 +186,10 @@ export function MapPage() {
             Ir ao Dashboard
           </Link>
         </div>
+      ) : null}
+
+      {createCoords ? (
+        <MapCreateModal coords={createCoords} onClose={() => setCreateCoords(null)} />
       ) : null}
     </div>
   )

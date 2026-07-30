@@ -15,6 +15,8 @@ interface ClientFormProps {
   isSubmitting: boolean
   onSubmit: (values: ClientFormValues) => Promise<void>
   onCancel: () => void
+  /** Mantém lat/lng (ex.: cadastro via duplo clique no mapa). */
+  lockCoordinates?: boolean
 }
 
 export function ClientForm({
@@ -23,6 +25,7 @@ export function ClientForm({
   isSubmitting,
   onSubmit,
   onCancel,
+  lockCoordinates = false,
 }: ClientFormProps) {
   const defaultCto = ctos.find((cto) => cto.id === initial?.ctoId) ?? ctos[0]
   const [values, setValues] = useState<ClientFormValues>({
@@ -47,8 +50,12 @@ export function ClientForm({
     setValues((prev) => ({
       ...prev,
       ctoId,
-      lat: cto ? cto.lat + 0.0004 : prev.lat,
-      lng: cto ? cto.lng + 0.0004 : prev.lng,
+      ...(lockCoordinates || !cto
+        ? {}
+        : {
+            lat: cto.lat + 0.0004,
+            lng: cto.lng + 0.0004,
+          }),
     }))
   }
 

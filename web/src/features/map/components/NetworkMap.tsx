@@ -1,6 +1,13 @@
 import L from 'leaflet'
 import { useEffect } from 'react'
-import { MapContainer, TileLayer, ZoomControl, useMap } from 'react-leaflet'
+import {
+  CircleMarker,
+  MapContainer,
+  TileLayer,
+  ZoomControl,
+  useMap,
+  useMapEvents,
+} from 'react-leaflet'
 import { AssetMarker } from '@/features/map/components/AssetMarker'
 import {
   MAP_DEFAULT_CENTER,
@@ -9,6 +16,7 @@ import {
   OSM_TILE_URL,
 } from '@/features/map/constants'
 import type { MapAsset } from '@/features/map/domain/mapTypes'
+import type { MapClickCoords } from '@/features/map/components/MapCreateModal'
 
 interface MapControllerProps {
   fitToken: number
@@ -16,6 +24,7 @@ interface MapControllerProps {
   locateToken: number
   assets: MapAsset[]
   onLocateError: (message: string | null) => void
+  onDoubleClick: (coords: MapClickCoords) => void
 }
 
 function MapController({
@@ -24,14 +33,23 @@ function MapController({
   locateToken,
   assets,
   onLocateError,
+  onDoubleClick,
 }: MapControllerProps) {
   const map = useMap()
+
+  useMapEvents({
+    dblclick(event) {
+      onDoubleClick({
+        lat: event.latlng.lat,
+        lng: event.latlng.lng,
+      })
+    },
+  })
 
   useEffect(() => {
     if (fitToken === 0 || assets.length === 0) return
     const bounds = L.latLngBounds(assets.map((asset) => [asset.lat, asset.lng] as [number, number]))
     map.fitBounds(bounds.pad(0.18), { animate: true })
-    // Só reenquadra quando o usuário pede (fitToken), não a cada update de assets
   }, [fitToken, map]) // eslint-disable-line react-hooks/exhaustive-deps -- assets no momento do fit
 
   useEffect(() => {
@@ -67,6 +85,8 @@ interface NetworkMapProps {
   flyTo: MapAsset | null
   locateToken: number
   onLocateError: (message: string | null) => void
+  onDoubleClick: (coords: MapClickCoords) => void
+  pendingCoords?: MapClickCoords | null
 }
 
 export function NetworkMap({
@@ -75,6 +95,8 @@ export function NetworkMap({
   flyTo,
   locateToken,
   onLocateError,
+  onDoubleClick,
+  pendingCoords = null,
 }: NetworkMapProps) {
   return (
     <MapContainer
@@ -82,6 +104,7 @@ export function NetworkMap({
       zoom={MAP_DEFAULT_ZOOM}
       className="h-full w-full"
       zoomControl={false}
+      doubleClickZoom={false}
     >
       <TileLayer attribution={OSM_ATTRIBUTION} url={OSM_TILE_URL} />
       <ZoomControl position="bottomright" />
@@ -91,10 +114,23 @@ export function NetworkMap({
         locateToken={locateToken}
         assets={assets}
         onLocateError={onLocateError}
+        onDoubleClick={onDoubleClick}
       />
       {assets.map((asset) => (
         <AssetMarker key={`${asset.type}-${asset.id}`} asset={asset} />
       ))}
+      {pendingCoords ? (
+        <CircleMarker
+          center={[pendingCoords.lat, pendingCoords.lng]}
+          radius={10}
+          pathOptions={{
+            color: '#38bdf8',
+            fillColor: '#22c55e',
+            fillOpacity: 0.85,
+            weight: 2,
+          }}
+        />
+      ) : null}
     </MapContainer>
   )
 }
