@@ -21,12 +21,12 @@ export function MapFilters({
   onStatusChange,
 }: MapFiltersProps) {
   return (
-    <div className="space-y-3 rounded-xl border border-[var(--border)] bg-[var(--bg-panel)]/95 p-3 shadow-lg backdrop-blur">
+    <div className="space-y-3 rounded-[var(--radius-md)] border border-[var(--border-strong)] bg-[var(--bg-panel)] p-3 shadow-[0_8px_28px_rgba(0,0,0,0.55)]">
       <div className="flex items-center justify-between gap-2">
-        <h3 className="text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase">
+        <h3 className="text-[11px] font-semibold tracking-[0.14em] text-[var(--text-muted)] uppercase">
           Filtros
         </h3>
-        <span className="rounded bg-white/10 px-2 py-0.5 text-[11px] text-[var(--text-muted)]">
+        <span className="font-mono-metric rounded-md bg-white/8 px-2 py-0.5 text-[11px] text-[var(--text-muted)]">
           {visibleCount} visíveis
         </span>
       </div>

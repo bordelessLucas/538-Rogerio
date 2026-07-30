@@ -22,7 +22,7 @@ import {
 import { useAssetEvents, useCto } from '@/features/network/hooks/useNetworkEntity'
 import { updateCto } from '@/features/network/services/networkService'
 import { buildMapDeepLink } from '@/features/map/utils/mapDeepLink'
-import { CardShell, StatusBadge } from '@/shared/ui'
+import { CardShell, DetailSkeleton, StatusBadge } from '@/shared/ui'
 import { useToast } from '@/shared/ui/Toast'
 import { STATUS_LABEL } from '@/shared/utils'
 import type { Client, Cto } from '@/shared/types/network'
@@ -83,11 +83,7 @@ export function CtoDetailPage() {
   }
 
   if (isLoading) {
-    return (
-      <CardShell>
-        <p className="text-sm text-[var(--text-muted)]">Carregando CTO...</p>
-      </CardShell>
-    )
+    return <DetailSkeleton />
   }
 
   if (error) {

@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import { cn } from '@/shared/utils'
 
 export function Field({
   label,
@@ -12,7 +11,9 @@ export function Field({
 }) {
   return (
     <label className="block space-y-1.5 text-sm">
-      <span className="text-[var(--text-muted)]">{label}</span>
+      <span className="text-xs font-medium tracking-wide text-[var(--text-muted)] uppercase">
+        {label}
+      </span>
       {children}
       {error ? <span className="text-xs text-[var(--status-offline)]">{error}</span> : null}
     </label>
@@ -20,7 +21,7 @@ export function Field({
 }
 
 export const fieldControlClass =
-  'w-full rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] px-3 py-2 text-sm outline-none transition focus:border-[var(--accent)]'
+  'r20-input text-sm'
 
 export function FormActions({
   isSubmitting,
@@ -33,20 +34,13 @@ export function FormActions({
 }) {
   return (
     <div className="flex justify-end gap-2">
-      <button
-        type="button"
-        onClick={onCancel}
-        className="rounded-lg border border-[var(--border)] px-3 py-2 text-sm text-[var(--text-muted)]"
-      >
+      <button type="button" onClick={onCancel} className="r20-btn r20-btn-ghost">
         Cancelar
       </button>
       <button
         type="submit"
         disabled={isSubmitting}
-        className={cn(
-          'rounded-lg bg-[var(--accent)] px-3 py-2 text-sm font-medium text-slate-950',
-          'disabled:opacity-60',
-        )}
+        className="r20-btn r20-btn-primary disabled:opacity-60"
       >
         {isSubmitting ? 'Salvando...' : submitLabel}
       </button>

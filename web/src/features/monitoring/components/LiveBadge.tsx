@@ -5,14 +5,11 @@ export function LiveBadge({ className }: { className?: string }) {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full border border-[var(--status-online)]/40 bg-[var(--status-online)]/10 px-2.5 py-1 text-xs font-semibold tracking-wide text-[var(--status-online)] uppercase',
+        'inline-flex items-center gap-1.5 rounded-md border border-[var(--status-online)]/35 bg-[var(--status-online)]/10 px-2.5 py-1 text-[11px] font-semibold tracking-[0.14em] text-[var(--status-online)] uppercase',
         className,
       )}
     >
-      <span className="relative flex size-2">
-        <span className="absolute inline-flex size-full animate-ping rounded-full bg-[var(--status-online)] opacity-60" />
-        <span className="relative inline-flex size-2 rounded-full bg-[var(--status-online)]" />
-      </span>
+      <span className="r20-live-dot size-1.5 rounded-full bg-[var(--status-online)]" />
       <Radio size={12} />
       Ao vivo
     </span>

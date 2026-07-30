@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { MapFilters } from '@/features/map/components/MapFilters'
 import { MapLegend } from '@/features/map/components/MapLegend'
 import { MapToolbar } from '@/features/map/components/MapToolbar'
@@ -144,8 +144,13 @@ export function MapPage() {
       </div>
 
       {isLoading ? (
-        <div className="absolute inset-0 z-[1100] flex items-center justify-center bg-[var(--bg-base)]/70 text-sm text-[var(--text-muted)]">
-          Carregando ativos do mapa...
+        <div className="absolute inset-0 z-[1100] flex items-center justify-center bg-[var(--bg-base)]/75">
+          <div className="w-64 space-y-3 rounded-xl border border-[var(--border)] bg-[var(--bg-panel)] p-4 shadow-lg">
+            <p className="text-sm text-[var(--text-muted)]">Carregando ativos do mapa...</p>
+            <div className="h-2 animate-pulse rounded bg-white/10" />
+            <div className="h-2 w-4/5 animate-pulse rounded bg-white/5" />
+            <div className="h-2 w-3/5 animate-pulse rounded bg-white/5" />
+          </div>
         </div>
       ) : null}
 
@@ -162,8 +167,16 @@ export function MapPage() {
       ) : null}
 
       {!isLoading && !error && assets.length === 0 ? (
-        <div className="absolute inset-x-0 bottom-4 z-[1100] mx-auto max-w-md rounded-xl border border-[var(--border)] bg-[var(--bg-panel)] px-4 py-3 text-center text-sm text-[var(--text-muted)]">
-          Nenhum ativo com coordenadas. Aplique o seed no Dashboard.
+        <div className="absolute inset-x-0 bottom-4 z-[1100] mx-auto max-w-md rounded-xl border border-[var(--border)] bg-[var(--bg-panel)] px-4 py-4 text-center shadow-lg">
+          <p className="text-sm text-[var(--text-muted)]">
+            Nenhum ativo com coordenadas. Aplique o seed no Dashboard.
+          </p>
+          <Link
+            to="/"
+            className="mt-3 inline-flex rounded-lg bg-[var(--accent)] px-3 py-1.5 text-sm font-medium text-slate-950"
+          >
+            Ir ao Dashboard
+          </Link>
         </div>
       ) : null}
     </div>

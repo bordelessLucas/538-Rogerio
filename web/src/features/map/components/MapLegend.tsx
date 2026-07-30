@@ -4,8 +4,8 @@ import { STATUS_LABEL } from '@/shared/utils'
 
 export function MapLegend() {
   return (
-    <div className="rounded-xl border border-[var(--border)] bg-[var(--bg-panel)]/95 p-3 shadow-lg backdrop-blur">
-      <h3 className="mb-2 text-xs font-semibold tracking-wide text-[var(--text-muted)] uppercase">
+    <div className="rounded-[var(--radius-md)] border border-[var(--border-strong)] bg-[var(--bg-panel)] p-3 shadow-[0_8px_28px_rgba(0,0,0,0.55)]">
+      <h3 className="mb-2 text-[11px] font-semibold tracking-[0.14em] text-[var(--text-muted)] uppercase">
         Legenda
       </h3>
 

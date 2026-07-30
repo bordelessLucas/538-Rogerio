@@ -22,7 +22,7 @@ import { useRecentEvents } from '@/features/dashboard/hooks/useRecentEvents'
 import { resetDashboardMetrics } from '@/features/dashboard/services/dashboardService'
 import { useAuth } from '@/features/auth/context/AuthContext'
 import { applyNetworkSeed } from '@/infra/firebase/seedService'
-import { CardShell } from '@/shared/ui'
+import { CardShell, SectionLabel } from '@/shared/ui'
 import { formatUpdatedAgo } from '@/shared/utils'
 
 function formatPercent(value: number) {
@@ -57,7 +57,9 @@ export function DashboardPage() {
     try {
       const networkResult = await applyNetworkSeed({ force: true })
       await resetDashboardMetrics()
-      setSeedMessage(`${networkResult.message} Métricas NOC atualizadas.`)
+      setSeedMessage(
+        `${networkResult.message} Modo apresentação pronto — métricas NOC resetadas.`,
+      )
     } catch (err) {
       setSeedMessage(err instanceof Error ? err.message : 'Falha ao aplicar seed')
     } finally {
@@ -84,10 +86,12 @@ export function DashboardPage() {
     <div className="space-y-6">
       <section className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
         <div>
-          <p className="text-xs font-semibold tracking-[0.2em] text-[var(--accent)] uppercase">
+          <p className="text-[11px] font-semibold tracking-[0.22em] text-[var(--accent)] uppercase">
             Dashboard NOC
           </p>
-          <h1 className="mt-1 text-2xl font-semibold md:text-3xl">Visão operacional da rede</h1>
+          <h1 className="mt-1 text-2xl font-semibold tracking-tight md:text-3xl">
+            Visão operacional da rede
+          </h1>
           <p className="mt-2 max-w-2xl text-sm text-[var(--text-muted)]">
             Saúde da rede FTTH em tempo real — indicadores simulados via Firestore.
           </p>
@@ -100,16 +104,16 @@ export function DashboardPage() {
                 type="button"
                 onClick={() => void handleSeed()}
                 disabled={isSeeding}
-                className="inline-flex items-center gap-2 rounded-lg border border-[var(--border)] px-3 py-2 text-sm transition hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:opacity-60"
+                className="r20-btn r20-btn-ghost disabled:opacity-60"
               >
                 <Database size={16} />
-                {isSeeding ? 'Aplicando...' : 'Reaplicar seed Firebase'}
+                {isSeeding ? 'Aplicando...' : 'Modo apresentação (seed)'}
               </button>
               <button
                 type="button"
                 onClick={() => void handleResetMetrics()}
                 disabled={isSeeding}
-                className="inline-flex items-center gap-2 rounded-lg border border-[var(--border)] px-3 py-2 text-sm transition hover:border-[var(--accent)] hover:text-[var(--accent)] disabled:opacity-60"
+                className="r20-btn r20-btn-ghost disabled:opacity-60"
               >
                 Reset métricas
               </button>
@@ -117,14 +121,21 @@ export function DashboardPage() {
           ) : null}
           <Link
             to="/mapa"
-            className="inline-flex items-center gap-2 rounded-lg border border-[var(--border)] px-3 py-2 text-sm transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+            className="r20-btn r20-btn-ghost"
           >
             <Map size={16} />
-            Ver no mapa
+            Mapa
+          </Link>
+          <Link
+            to="/monitoramento"
+            className="r20-btn r20-btn-ghost"
+          >
+            <Activity size={16} />
+            Monitoramento
           </Link>
           <Link
             to="/rede"
-            className="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-3 py-2 text-sm font-medium text-slate-950 transition hover:brightness-110"
+            className="r20-btn r20-btn-primary"
           >
             <Network size={16} />
             Cadastros
@@ -141,8 +152,8 @@ export function DashboardPage() {
 
       <section>
         <div className="mb-3 flex items-center justify-between gap-3">
-          <h2 className="text-sm font-medium text-[var(--text-muted)]">Indicadores principais</h2>
-          <span className="text-xs text-[var(--text-muted)]">
+          <SectionLabel>Indicadores principais</SectionLabel>
+          <span className="font-mono-metric text-[11px] text-[var(--text-muted)]">
             {updatedAt ? formatUpdatedAgo(updatedAt, now) : isLoading ? 'Carregando...' : 'Sem dados'}
           </span>
         </div>
@@ -210,7 +221,7 @@ export function DashboardPage() {
 
       <section>
         <div className="mb-3">
-          <h2 className="text-sm font-medium text-[var(--text-muted)]">Operação</h2>
+          <SectionLabel>Operação</SectionLabel>
         </div>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
           <KpiCard
@@ -263,11 +274,19 @@ export function DashboardPage() {
         <EventsPreview events={events} isLoading={eventsLoading} error={eventsError} />
 
         <CardShell>
-          <h3 className="font-medium">Atalhos rápidos</h3>
+          <SectionLabel>Atalhos da demo</SectionLabel>
+          <p className="mt-2 text-xs text-[var(--text-muted)]">
+            Fluxo: Offline → Evento → Cliente → Mapa → CTO → Cadastro
+          </p>
           <ul className="mt-3 space-y-2 text-sm text-[var(--text-muted)]">
             <li>
-              <Link className="hover:text-[var(--accent)]" to="/rede/olts">
-                → OLTs
+              <Link className="hover:text-[var(--accent)]" to="/monitoramento">
+                → Monitoramento (card Offline)
+              </Link>
+            </li>
+            <li>
+              <Link className="hover:text-[var(--accent)]" to="/mapa">
+                → Mapa Inteligente
               </Link>
             </li>
             <li>
@@ -281,13 +300,8 @@ export function DashboardPage() {
               </Link>
             </li>
             <li>
-              <Link className="hover:text-[var(--accent)]" to="/monitoramento">
-                → Monitoramento
-              </Link>
-            </li>
-            <li>
-              <Link className="hover:text-[var(--accent)]" to="/chamados">
-                → Chamados
+              <Link className="hover:text-[var(--accent)]" to="/rede/olts">
+                → OLTs / cadastro
               </Link>
             </li>
           </ul>

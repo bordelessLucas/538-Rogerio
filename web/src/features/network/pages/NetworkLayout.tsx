@@ -19,7 +19,12 @@ export function NetworkLayout() {
     <div className="space-y-5">
       {isDetailRoute ? null : (
         <div>
-          <h1 className="text-2xl font-semibold">Cadastro de Rede</h1>
+          <p className="text-[11px] font-semibold tracking-[0.18em] text-[var(--accent)] uppercase">
+            Inventário
+          </p>
+          <h1 className="mt-1 text-2xl font-semibold tracking-tight md:text-3xl">
+            Cadastro de Rede
+          </h1>
           <p className="mt-1 text-sm text-[var(--text-muted)]">
             Hierarquia OLT → PON → CTO → Cliente com associações e CRUD.
           </p>
@@ -27,7 +32,7 @@ export function NetworkLayout() {
       )}
 
       {isDetailRoute ? null : (
-        <div className="flex flex-wrap gap-2 border-b border-[var(--border)] pb-3">
+        <div className="flex flex-wrap gap-1 rounded-xl border border-[var(--border)] bg-[var(--bg-panel)] p-1.5 shadow-[var(--shadow-panel)]">
           {tabs.map((tab) => (
             <NavLink
               key={tab.to}
@@ -35,10 +40,10 @@ export function NetworkLayout() {
               end={tab.end}
               className={({ isActive }) =>
                 cn(
-                  'rounded-lg px-3 py-1.5 text-sm transition',
+                  'rounded-lg px-3.5 py-2 text-sm font-medium transition',
                   isActive
-                    ? 'bg-[var(--accent)]/15 text-[var(--accent)]'
-                    : 'text-[var(--text-muted)] hover:bg-white/5',
+                    ? 'bg-[var(--accent-soft)] text-[var(--accent)] shadow-sm'
+                    : 'text-[var(--text-muted)] hover:bg-white/[0.04] hover:text-[var(--text-primary)]',
                 )
               }
             >

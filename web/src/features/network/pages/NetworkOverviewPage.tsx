@@ -27,9 +27,41 @@ export function NetworkOverviewPage() {
 
   const overCapacity = ctos.filter((cto) => cto.occupancyPercent > 80).length
   const offlineClients = clients.filter((client) => client.status === 'offline').length
+  const isEmpty =
+    !loadingOlts &&
+    !loadingPons &&
+    !loadingCtos &&
+    !loadingClients &&
+    olts.length === 0 &&
+    pons.length === 0 &&
+    ctos.length === 0 &&
+    clients.length === 0
 
   return (
     <div className="space-y-4">
+      {isEmpty ? (
+        <CardShell className="text-center">
+          <h3 className="font-medium">Rede ainda vazia</h3>
+          <p className="mt-1 text-sm text-[var(--text-muted)]">
+            Aplique o seed no Dashboard (modo apresentação) ou cadastre a primeira OLT.
+          </p>
+          <div className="mt-4 flex flex-wrap justify-center gap-2">
+            <Link
+              to="/"
+              className="rounded-lg border border-[var(--border)] px-3 py-2 text-sm hover:border-[var(--accent)]"
+            >
+              Dashboard / seed
+            </Link>
+            <Link
+              to="/rede/olts"
+              className="rounded-lg bg-[var(--accent)] px-3 py-2 text-sm font-medium text-slate-950"
+            >
+              Cadastrar OLT
+            </Link>
+          </div>
+        </CardShell>
+      ) : null}
+
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-4">
         {cards.map((card) => (
           <Link key={card.to} to={card.to}>

@@ -15,7 +15,7 @@ import {
   updatePon,
 } from '@/features/network/services/networkService'
 import { matchesQuery, paginate } from '@/features/network/utils/list'
-import { CardShell, StatusBadge } from '@/shared/ui'
+import { CardShell, ListSkeleton, StatusBadge } from '@/shared/ui'
 import { useToast } from '@/shared/ui/Toast'
 import { STATUS_LABEL } from '@/shared/utils'
 import type { Pon } from '@/shared/types/network'
@@ -103,9 +103,7 @@ export function PonsPage() {
       {error ? <p className="text-sm text-[var(--status-offline)]">{error.message}</p> : null}
 
       {isLoading ? (
-        <CardShell>
-          <p className="text-sm text-[var(--text-muted)]">Carregando PONs...</p>
-        </CardShell>
+        <ListSkeleton rows={6} />
       ) : filtered.length === 0 ? (
         <EmptyState
           title="Nenhuma PON encontrada"

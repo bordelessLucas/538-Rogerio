@@ -116,7 +116,7 @@ export function MonitoringPage() {
               {liveCount} evento(s) na collection · listener Firestore
             </span>
           </div>
-          <h1 className="text-2xl font-semibold md:text-3xl">Monitoramento</h1>
+          <h1 className="text-2xl font-semibold tracking-tight md:text-3xl">Monitoramento</h1>
           <p className="mt-1 max-w-2xl text-sm text-[var(--text-muted)]">
             Feed operacional AO VIVO — offline, potência e oscilação (simulados). Pronto
             para plugar SNMP/API depois.
@@ -130,7 +130,7 @@ export function MonitoringPage() {
                 type="button"
                 disabled={isSimulating}
                 onClick={() => void handleSimulateOnce()}
-                className="inline-flex items-center gap-2 rounded-lg border border-[var(--border)] px-3 py-2 text-sm hover:border-[var(--accent)] disabled:opacity-60"
+                className="r20-btn r20-btn-ghost disabled:opacity-60"
               >
                 <Play size={14} />
                 {isSimulating ? 'Gerando...' : 'Simular evento'}
@@ -138,7 +138,7 @@ export function MonitoringPage() {
               <button
                 type="button"
                 onClick={() => setAutoDemo((value) => !value)}
-                className="inline-flex items-center gap-2 rounded-lg bg-[var(--accent)] px-3 py-2 text-sm font-medium text-slate-950"
+                className="r20-btn r20-btn-primary"
               >
                 {autoDemo ? <Square size={14} /> : <Play size={14} />}
                 {autoDemo ? 'Parar demo automática' : 'Demo automática'}
@@ -147,7 +147,7 @@ export function MonitoringPage() {
           ) : null}
           <Link
             to="/mapa"
-            className="inline-flex items-center rounded-lg border border-[var(--border)] px-3 py-2 text-sm hover:border-[var(--accent)]"
+            className="r20-btn r20-btn-ghost"
           >
             Ver mapa
           </Link>

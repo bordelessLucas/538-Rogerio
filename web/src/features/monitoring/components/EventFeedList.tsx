@@ -75,9 +75,20 @@ export function EventFeedList({
 
   if (events.length === 0) {
     return (
-      <p className="rounded-xl border border-[var(--border)] bg-[var(--bg-panel)] px-4 py-6 text-center text-sm text-[var(--text-muted)]">
-        Nenhum evento com os filtros atuais. Use o simulador ou aplique o seed.
-      </p>
+      <div className="rounded-xl border border-dashed border-[var(--border)] bg-[var(--bg-panel)] px-4 py-8 text-center">
+        <p className="text-sm text-[var(--text-muted)]">
+          Nenhum evento com os filtros atuais.
+        </p>
+        <p className="mt-1 text-xs text-[var(--text-muted)]">
+          Use o simulador (admin), a demo automática ou aplique o seed no Dashboard.
+        </p>
+        <Link
+          to="/"
+          className="mt-4 inline-flex rounded-lg bg-[var(--accent)] px-3 py-1.5 text-sm font-medium text-slate-950"
+        >
+          Ir ao Dashboard
+        </Link>
+      </div>
     )
   }
 

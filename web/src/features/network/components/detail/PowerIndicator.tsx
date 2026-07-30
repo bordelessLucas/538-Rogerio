@@ -23,7 +23,7 @@ export function PowerIndicator({ powerDbm, className, size = 'md' }: PowerIndica
     <div className={cn('inline-flex flex-col gap-1', className)}>
       <span
         className={cn(
-          'inline-flex items-baseline gap-1 font-semibold tabular-nums',
+          'inline-flex items-baseline gap-1 font-mono-metric font-semibold tabular-nums',
           size === 'sm' && 'text-sm',
           size === 'md' && 'text-xl',
           size === 'lg' && 'text-3xl',

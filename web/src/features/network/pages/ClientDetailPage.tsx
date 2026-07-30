@@ -21,7 +21,7 @@ import {
 import { useAssetEvents, useClient } from '@/features/network/hooks/useNetworkEntity'
 import { updateClient } from '@/features/network/services/networkService'
 import { buildMapDeepLink } from '@/features/map/utils/mapDeepLink'
-import { CardShell, StatusBadge } from '@/shared/ui'
+import { CardShell, DetailSkeleton, StatusBadge } from '@/shared/ui'
 import { useToast } from '@/shared/ui/Toast'
 import { STATUS_LABEL } from '@/shared/utils'
 
@@ -36,7 +36,6 @@ export function ClientDetailPage() {
   const { events, isLoading: eventsLoading } = useAssetEvents(id)
   const [drawerOpen, setDrawerOpen] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [signalStubOpen, setSignalStubOpen] = useState(false)
 
   const cto = useMemo(
     () => ctos.find((item) => item.id === client?.ctoId) ?? null,
@@ -66,11 +65,7 @@ export function ClientDetailPage() {
   }
 
   if (isLoading) {
-    return (
-      <CardShell>
-        <p className="text-sm text-[var(--text-muted)]">Carregando cliente...</p>
-      </CardShell>
-    )
+    return <DetailSkeleton />
   }
 
   if (error) {
@@ -162,10 +157,7 @@ export function ClientDetailPage() {
           </button>
           <button
             type="button"
-            onClick={() => {
-              setSignalStubOpen(true)
-              navigate(`/monitoramento?clientId=${client.id}`)
-            }}
+            onClick={() => navigate(`/monitoramento?clientId=${client.id}`)}
             className="inline-flex items-center gap-1.5 rounded-lg bg-[var(--accent)] px-3 py-2 text-sm font-medium text-slate-950"
           >
             <Activity size={14} /> Histórico de sinal
@@ -222,7 +214,7 @@ export function ClientDetailPage() {
 
       <DetailSection
         title="Histórico de sinal"
-        description={signalStubOpen ? 'Preview simulado' : 'Sparkline fake para demo'}
+        description="Sparkline simulada para a demo (telemetria real na Fase 1)"
       >
         <SignalSparkline powerDbm={client.powerDbm} />
       </DetailSection>

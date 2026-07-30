@@ -1,6 +1,5 @@
 import {
   Activity,
-  Boxes,
   LayoutDashboard,
   Map,
   Menu,
@@ -12,6 +11,7 @@ import {
 import { useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '@/features/auth/context/AuthContext'
+import { BrandLogo } from '@/shared/ui'
 import { APP_VERSION, cn } from '@/shared/utils'
 
 const navItems = [
@@ -25,6 +25,23 @@ const navItems = [
 
 function breadcrumbFromPath(pathname: string) {
   if (pathname === '/') return 'Dashboard NOC'
+  if (pathname.startsWith('/mapa')) return 'Mapa Inteligente'
+  if (pathname.startsWith('/monitoramento')) return 'Monitoramento'
+  if (pathname.startsWith('/chamados')) return 'Chamados'
+  if (pathname.startsWith('/configuracoes')) return 'Configurações'
+
+  if (pathname.startsWith('/rede')) {
+    if (pathname.includes('/ctos/') && pathname !== '/rede/ctos') return 'Rede · Detalhe CTO'
+    if (pathname.includes('/clientes/') && pathname !== '/rede/clientes') {
+      return 'Rede · Detalhe Cliente'
+    }
+    if (pathname.startsWith('/rede/olts')) return 'Rede · OLTs'
+    if (pathname.startsWith('/rede/pons')) return 'Rede · PONs'
+    if (pathname.startsWith('/rede/ctos')) return 'Rede · CTOs'
+    if (pathname.startsWith('/rede/clientes')) return 'Rede · Clientes'
+    return 'Cadastro de Rede'
+  }
+
   const item = navItems.find((entry) => entry.to !== '/' && pathname.startsWith(entry.to))
   return item?.label ?? 'R20 NOC'
 }
@@ -42,24 +59,19 @@ export function AppLayout() {
           <button
             type="button"
             aria-label="Fechar menu"
-            className="fixed inset-0 z-30 bg-black/50 lg:hidden"
+            className="fixed inset-0 z-30 bg-black/55 backdrop-blur-[2px] lg:hidden"
             onClick={() => setIsSidebarOpen(false)}
           />
         ) : null}
 
         <aside
           className={cn(
-            'fixed inset-y-0 left-0 z-40 flex w-72 flex-col border-r border-[var(--border)] bg-[var(--bg-panel)] transition-transform lg:static lg:translate-x-0',
+            'fixed inset-y-0 left-0 z-40 flex w-[17.5rem] flex-col border-r border-[var(--border)] bg-[var(--bg-panel)] transition-transform lg:static lg:translate-x-0',
             isSidebarOpen ? 'translate-x-0' : '-translate-x-full',
           )}
         >
-          <div className="flex items-center justify-between border-b border-[var(--border)] px-5 py-4">
-            <div>
-              <p className="text-[10px] font-semibold tracking-[0.22em] text-[var(--accent)] uppercase">
-                R20 Telecom
-              </p>
-              <h1 className="text-lg font-semibold">R20 NOC</h1>
-            </div>
+          <div className="flex items-center justify-between border-b border-[var(--border)] px-4 py-4">
+            <BrandLogo />
             <button
               type="button"
               className="rounded-lg p-2 text-[var(--text-muted)] hover:bg-white/5 lg:hidden"
@@ -69,7 +81,10 @@ export function AppLayout() {
             </button>
           </div>
 
-          <nav className="flex-1 space-y-1 p-3">
+          <nav className="flex-1 space-y-0.5 p-3">
+            <p className="mb-2 px-3 text-[10px] font-semibold tracking-[0.18em] text-[var(--text-muted)] uppercase">
+              Operação
+            </p>
             {navItems.map((item) => {
               const Icon = item.icon
               return (
@@ -80,36 +95,46 @@ export function AppLayout() {
                   onClick={() => setIsSidebarOpen(false)}
                   className={({ isActive }) =>
                     cn(
-                      'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition',
+                      'group relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition',
                       isActive
-                        ? 'bg-[var(--accent)]/15 text-[var(--accent)]'
-                        : 'text-[var(--text-muted)] hover:bg-white/5 hover:text-[var(--text-primary)]',
+                        ? 'bg-[var(--accent-soft)] text-[var(--accent)]'
+                        : 'text-[var(--text-muted)] hover:bg-white/[0.04] hover:text-[var(--text-primary)]',
                     )
                   }
                 >
-                  <Icon size={18} />
-                  <span className="flex-1">{item.label}</span>
-                  {item.soon ? (
-                    <span className="rounded bg-white/10 px-1.5 py-0.5 text-[10px] uppercase">
-                      Em breve
-                    </span>
-                  ) : null}
+                  {({ isActive }) => (
+                    <>
+                      {isActive ? (
+                        <span className="absolute top-1/2 left-0 h-5 w-0.5 -translate-y-1/2 rounded-r bg-[var(--accent)]" />
+                      ) : null}
+                      <Icon size={18} className={isActive ? 'opacity-100' : 'opacity-80'} />
+                      <span className="flex-1 font-medium">{item.label}</span>
+                      {item.soon ? (
+                        <span className="rounded-md bg-white/8 px-1.5 py-0.5 text-[9px] font-semibold tracking-wide text-[var(--text-muted)] uppercase">
+                          Em breve
+                        </span>
+                      ) : null}
+                    </>
+                  )}
                 </NavLink>
               )
             })}
           </nav>
 
-          <div className="border-t border-[var(--border)] p-4 text-xs text-[var(--text-muted)]">
-            <div className="mb-2 flex items-center gap-2">
-              <Boxes size={14} />
-              Protótipo FTTH
+          <div className="border-t border-[var(--border)] p-4">
+            <div className="rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)]/60 px-3 py-2.5">
+              <p className="text-[10px] font-semibold tracking-[0.14em] text-[var(--accent)] uppercase">
+                Command Deck
+              </p>
+              <p className="mt-1 text-xs text-[var(--text-muted)]">
+                Protótipo FTTH · {APP_VERSION}
+              </p>
             </div>
-            <p>{APP_VERSION}</p>
           </div>
         </aside>
 
         <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-          <header className="sticky top-0 z-20 flex shrink-0 items-center justify-between gap-4 border-b border-[var(--border)] bg-[var(--bg-base)]/90 px-4 py-3 backdrop-blur md:px-6">
+          <header className="sticky top-0 z-20 flex shrink-0 items-center justify-between gap-4 border-b border-[var(--border)] bg-[var(--bg-base)]/85 px-4 py-3 backdrop-blur-md md:px-6">
             <div className="flex items-center gap-3">
               <button
                 type="button"
@@ -119,24 +144,30 @@ export function AppLayout() {
                 <Menu size={18} />
               </button>
               <div>
-                <p className="text-xs text-[var(--text-muted)]">Painel operacional</p>
-                <h2 className="text-sm font-medium md:text-base">
+                <p className="text-[10px] font-semibold tracking-[0.16em] text-[var(--text-muted)] uppercase">
+                  Painel operacional
+                </p>
+                <h2 className="text-sm font-semibold tracking-tight md:text-base">
                   {breadcrumbFromPath(location.pathname)}
                 </h2>
               </div>
             </div>
 
             <div className="flex items-center gap-3">
+              <div className="hidden items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--bg-panel)] px-2.5 py-1.5 sm:flex">
+                <span className="r20-live-dot size-1.5 rounded-full bg-[var(--status-online)]" />
+                <span className="text-[11px] text-[var(--text-muted)]">AO VIVO</span>
+              </div>
               <div className="hidden text-right sm:block">
                 <p className="text-sm font-medium">{profile?.displayName ?? 'Usuário'}</p>
-                <p className="text-xs text-[var(--text-muted)]">
-                  {profile?.role?.toUpperCase() ?? 'NOC'} · sessão ativa
+                <p className="font-mono-metric text-[11px] text-[var(--text-muted)]">
+                  {(profile?.role ?? 'noc').toUpperCase()} · sessão ativa
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => void signOut()}
-                className="rounded-lg border border-[var(--border)] px-3 py-1.5 text-sm text-[var(--text-muted)] transition hover:border-[var(--status-offline)] hover:text-[var(--status-offline)]"
+                className="r20-btn r20-btn-ghost"
               >
                 Sair
               </button>
@@ -154,7 +185,11 @@ export function AppLayout() {
 
           {isMapRoute ? null : (
             <footer className="border-t border-[var(--border)] px-4 py-3 text-center text-xs text-[var(--text-muted)] md:px-6">
-              R20 NOC · {APP_VERSION} · Visão operacional da rede FTTH
+              <span className="text-[var(--text-primary)]">R20 NOC</span>
+              {' · '}
+              {APP_VERSION}
+              {' · '}
+              Visão operacional da rede FTTH
             </footer>
           )}
         </div>

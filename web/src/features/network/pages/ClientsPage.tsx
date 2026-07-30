@@ -16,7 +16,7 @@ import {
 } from '@/features/network/services/networkService'
 import { matchesQuery, paginate } from '@/features/network/utils/list'
 import { buildMapDeepLink } from '@/features/map/utils/mapDeepLink'
-import { CardShell, StatusBadge } from '@/shared/ui'
+import { CardShell, ListSkeleton, StatusBadge } from '@/shared/ui'
 import { useToast } from '@/shared/ui/Toast'
 import { STATUS_LABEL } from '@/shared/utils'
 import type { Client } from '@/shared/types/network'
@@ -125,9 +125,7 @@ export function ClientsPage() {
       {error ? <p className="text-sm text-[var(--status-offline)]">{error.message}</p> : null}
 
       {isLoading ? (
-        <CardShell>
-          <p className="text-sm text-[var(--text-muted)]">Carregando clientes...</p>
-        </CardShell>
+        <ListSkeleton rows={6} />
       ) : filtered.length === 0 ? (
         <EmptyState
           title="Nenhum cliente encontrado"

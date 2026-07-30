@@ -47,14 +47,14 @@ export function ListToolbar({
           value={search}
           onChange={(event) => onSearchChange(event.target.value)}
           placeholder={placeholder}
-          className="w-full rounded-lg border border-[var(--border)] bg-[var(--bg-elevated)] px-3 py-2 text-sm outline-none focus:border-[var(--accent)] sm:max-w-xs"
+          className="r20-input sm:max-w-xs"
         />
         {filters}
       </div>
       <button
         type="button"
         onClick={onCreate}
-        className="rounded-lg bg-[var(--accent)] px-3 py-2 text-sm font-medium text-slate-950"
+        className="r20-btn r20-btn-primary"
       >
         {createLabel}
       </button>

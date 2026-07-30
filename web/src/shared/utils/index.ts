@@ -18,7 +18,7 @@ export function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(' ')
 }
 
-export const APP_VERSION = 'v0.1.0-proto'
+export const APP_VERSION = 'v0.1.0-sprint1'
 
 /** Timestamp relativo para o listener do dashboard (“Atualizado há Xs”). */
 export function formatUpdatedAgo(isoDate: string, nowMs = Date.now()): string {

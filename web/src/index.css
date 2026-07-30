@@ -1,18 +1,27 @@
 @import 'tailwindcss';
 
 :root {
-  --bg-base: #0b1220;
-  --bg-panel: #111a2b;
-  --bg-elevated: #162235;
-  --border: #243247;
+  --bg-base: #070b14;
+  --bg-panel: #0e1626;
+  --bg-elevated: #152033;
+  --border: #1e2a3d;
+  --border-strong: #2a3a52;
   --text-primary: #e8eef7;
-  --text-muted: #93a4bd;
+  --text-muted: #8b9cb3;
   --accent: #38bdf8;
+  --accent-soft: rgba(56, 189, 248, 0.12);
   --status-online: #22c55e;
   --status-alert: #eab308;
   --status-offline: #ef4444;
   --status-disabled: #94a3b8;
-  font-family: 'Segoe UI', 'IBM Plex Sans', 'Helvetica Neue', sans-serif;
+  --status-warn: #fb923c;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-panel: 0 1px 0 rgba(255, 255, 255, 0.03) inset, 0 8px 24px rgba(0, 0, 0, 0.25);
+  --font-sans: 'IBM Plex Sans', 'Segoe UI', 'Helvetica Neue', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  font-family: var(--font-sans);
   line-height: 1.5;
   font-weight: 400;
   color: var(--text-primary);
@@ -37,8 +46,8 @@ body {
   margin: 0;
   min-width: 320px;
   background:
-    radial-gradient(ellipse at top left, rgba(56, 189, 248, 0.08), transparent 40%),
-    radial-gradient(ellipse at bottom right, rgba(34, 197, 94, 0.05), transparent 35%),
+    radial-gradient(ellipse 80% 50% at 0% 0%, rgba(56, 189, 248, 0.07), transparent 50%),
+    radial-gradient(ellipse 60% 40% at 100% 100%, rgba(34, 197, 94, 0.04), transparent 45%),
     var(--bg-base);
 }
 
@@ -48,8 +57,87 @@ a {
 }
 
 button,
-input {
+input,
+select,
+textarea {
   font: inherit;
+}
+
+::selection {
+  background: rgba(56, 189, 248, 0.28);
+  color: var(--text-primary);
+}
+
+/* Controles de formulário — densidade profissional */
+.r20-input {
+  width: 100%;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  padding: 0.625rem 0.75rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.r20-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.r20-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: var(--radius-sm);
+  padding: 0.5rem 0.875rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease, filter 0.15s ease;
+}
+
+.r20-btn-primary {
+  background: var(--accent);
+  color: #041018;
+  border: 1px solid transparent;
+}
+
+.r20-btn-primary:hover {
+  filter: brightness(1.08);
+}
+
+.r20-btn-ghost {
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.r20-btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.font-mono-metric {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+@keyframes r20-live-pulse {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.45;
+    transform: scale(0.85);
+  }
+}
+
+.r20-live-dot {
+  animation: r20-live-pulse 1.6s ease-in-out infinite;
 }
 
 /* Leaflet — marcadores custom + popup alinhado ao tema NOC */
@@ -59,15 +147,23 @@ input {
 }
 
 .leaflet-container {
-  background: #0b1220;
+  background: #070b14;
   font: inherit;
 }
 
 .r20-map-popup .leaflet-popup-content-wrapper {
   border-radius: 12px;
   padding: 2px;
+  background: var(--bg-panel);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-panel);
 }
 
 .r20-map-popup .leaflet-popup-content {
   margin: 10px 12px;
+}
+
+.r20-map-popup .leaflet-popup-tip {
+  background: var(--bg-panel);
 }
