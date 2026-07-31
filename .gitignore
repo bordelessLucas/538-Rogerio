@@ -1,6 +1,3 @@
-# Documentação interna (não versionar)
-doc/
-
 # Ambiente
 .env
 .env.local
