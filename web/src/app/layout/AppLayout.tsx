@@ -19,8 +19,8 @@ const navItems = [
   { to: '/mapa', label: 'Mapa Inteligente', icon: Map },
   { to: '/rede', label: 'Cadastro de Rede', icon: Network },
   { to: '/monitoramento', label: 'Monitoramento', icon: Activity },
-  { to: '/chamados', label: 'Chamados', icon: Ticket, soon: true },
-  { to: '/configuracoes', label: 'Configurações', icon: Settings, soon: true },
+  { to: '/chamados', label: 'Chamados', icon: Ticket },
+  { to: '/configuracoes', label: 'Configurações', icon: Settings },
 ]
 
 function breadcrumbFromPath(pathname: string) {
@@ -109,11 +109,6 @@ export function AppLayout() {
                       ) : null}
                       <Icon size={18} className={isActive ? 'opacity-100' : 'opacity-80'} />
                       <span className="flex-1 font-medium">{item.label}</span>
-                      {item.soon ? (
-                        <span className="rounded-md bg-white/8 px-1.5 py-0.5 text-[9px] font-semibold tracking-wide text-[var(--text-muted)] uppercase">
-                          Em breve
-                        </span>
-                      ) : null}
                     </>
                   )}
                 </NavLink>

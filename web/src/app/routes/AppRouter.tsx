@@ -14,7 +14,8 @@ import { NetworkLayout } from '@/features/network/pages/NetworkLayout'
 import { NetworkOverviewPage } from '@/features/network/pages/NetworkOverviewPage'
 import { OltsPage } from '@/features/network/pages/OltsPage'
 import { PonsPage } from '@/features/network/pages/PonsPage'
-import { PlaceholderPage } from '@/shared/ui/PlaceholderPage'
+import { SettingsPage } from '@/features/settings/pages/SettingsPage'
+import { TicketsPage } from '@/features/tickets/pages/TicketsPage'
 import { ToastProvider } from '@/shared/ui/Toast'
 
 export function AppRouter() {
@@ -39,24 +40,8 @@ export function AppRouter() {
                   <Route path="clientes/:id" element={<ClientDetailPage />} />
                 </Route>
                 <Route path="monitoramento" element={<MonitoringPage />} />
-                <Route
-                  path="chamados"
-                  element={
-                    <PlaceholderPage
-                      title="Chamados"
-                      description="Placeholder do menu. CRUD entra nas próximas fases."
-                    />
-                  }
-                />
-                <Route
-                  path="configuracoes"
-                  element={
-                    <PlaceholderPage
-                      title="Configurações"
-                      description="Preferências da operadora e limiares na Sprint 02."
-                    />
-                  }
-                />
+                <Route path="chamados" element={<TicketsPage />} />
+                <Route path="configuracoes" element={<SettingsPage />} />
               </Route>
             </Route>
 

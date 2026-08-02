@@ -115,6 +115,10 @@ export interface Ticket {
   clientId?: string
   priority: 'low' | 'medium' | 'high'
   createdAt: string
+  description?: string
+  assignee?: string
+  category?: 'connection' | 'signal' | 'equipment' | 'other'
+  updatedAt?: string
 }
 
 export interface NocMetrics {
