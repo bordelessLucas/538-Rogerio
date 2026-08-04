@@ -3,6 +3,7 @@ import { useState, type FormEvent } from 'react'
 import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/features/auth/context/AuthContext'
 import { registerDemoAdmin } from '@/features/auth/services/authService'
+import { OnboardingExperience } from '@/features/onboarding/components/OnboardingExperience'
 import { BrandLogo } from '@/shared/ui'
 import { APP_VERSION } from '@/shared/utils'
 
@@ -63,6 +64,7 @@ export function LoginPage() {
 
   return (
     <div className="relative flex min-h-screen overflow-hidden bg-[var(--bg-base)]">
+      <OnboardingExperience autoOpen showTrigger={false} />
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_20%_0%,rgba(56,189,248,0.16),transparent_45%),radial-gradient(ellipse_at_90%_100%,rgba(34,197,94,0.08),transparent_40%)]" />
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.035]"

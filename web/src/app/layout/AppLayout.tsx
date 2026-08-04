@@ -11,6 +11,7 @@ import {
 import { useState } from 'react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '@/features/auth/context/AuthContext'
+import { OnboardingExperience } from '@/features/onboarding/components/OnboardingExperience'
 import { BrandLogo } from '@/shared/ui'
 import { APP_VERSION, cn } from '@/shared/utils'
 
@@ -149,6 +150,7 @@ export function AppLayout() {
             </div>
 
             <div className="flex items-center gap-3">
+              <OnboardingExperience />
               <div className="hidden items-center gap-2 rounded-lg border border-[var(--border)] bg-[var(--bg-panel)] px-2.5 py-1.5 sm:flex">
                 <span className="r20-live-dot size-1.5 rounded-full bg-[var(--status-online)]" />
                 <span className="text-[11px] text-[var(--text-muted)]">AO VIVO</span>
